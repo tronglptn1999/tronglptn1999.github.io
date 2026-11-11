@@ -151,6 +151,10 @@
     <div class="panel toon-panel rv">
       <div class="bubble">Mời bạn đến chung vui nhé! 💕</div>
       <svg id="toon" class="toon" viewBox="0 0 320 290" role="img" aria-label="Chú rể và cô dâu hoạt hình nắm tay nhau">
+        <defs>
+          <clipPath id="cg"><circle cx="105" cy="96" r="41"/></clipPath>
+          <clipPath id="cb"><circle cx="215" cy="102" r="41"/></clipPath>
+        </defs>
         <ellipse class="shadow" cx="160" cy="272" rx="120" ry="9" fill="rgba(0,0,0,.12)"/>
         <g class="hearts" fill="#e0243f">
           <text class="h1" x="150" y="80" font-size="22">♥</text>
@@ -170,13 +174,11 @@
             <path d="M72 158 L63 208" stroke="#26262c" stroke-width="15" stroke-linecap="round"/><circle cx="62" cy="212" r="7.5" fill="#ffdcc2"/>
             <path d="M138 158 L166 204" stroke="#26262c" stroke-width="15" stroke-linecap="round"/>
             <rect x="97" y="124" width="16" height="14" fill="#ffdcc2"/>
-            <circle cx="105" cy="100" r="35" fill="#ffe3cc"/>
-            <circle cx="70" cy="104" r="6" fill="#ffe3cc"/><circle cx="140" cy="104" r="6" fill="#ffe3cc"/>
-            <path d="M69 98 Q68 60 105 62 Q142 60 141 98 Q134 78 105 79 Q76 78 69 98Z" fill="#1d1d22"/>
-            <g fill="none" stroke="#222" stroke-width="2.4"><circle cx="92" cy="104" r="10"/><circle cx="118" cy="104" r="10"/><path d="M102 103 L108 103"/></g>
-            <g class="eyes" fill="#222"><ellipse cx="92" cy="104" rx="3.2" ry="4.2"/><ellipse cx="118" cy="104" rx="3.2" ry="4.2"/></g>
-            <circle cx="82" cy="117" r="5" fill="#ff9aa8" opacity=".5"/><circle cx="128" cy="117" r="5" fill="#ff9aa8" opacity=".5"/>
-            <path d="M96 118 Q105 128 114 118" stroke="#b3122e" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+            <g class="head">
+              <circle cx="105" cy="96" r="43" fill="#fff"/>
+              <image href="img/photos/groom.jpg" x="58" y="49" width="94" height="94" clip-path="url(#cg)" preserveAspectRatio="xMidYMid slice"/>
+              <circle cx="105" cy="96" r="41" fill="none" stroke="#f3d98b" stroke-width="3"/>
+            </g>
           </g>
           <g class="bride">
             <g class="dress">
@@ -186,14 +188,12 @@
             <path d="M182 182 Q215 168 248 182" fill="none" stroke="#e8cf92" stroke-width="2"/>
             <rect x="207" y="126" width="16" height="14" fill="#ffe3cc"/>
             <path d="M178 66 Q215 48 252 66 Q268 150 262 214 Q244 130 215 76 Q186 130 168 214 Q162 150 178 66Z" fill="#fff" stroke="#eadcc2" stroke-width="1.5" opacity=".85"/>
-            <path d="M180 104 Q176 58 215 60 Q254 58 250 104 L256 168 Q240 156 238 122 L192 122 Q190 156 174 168Z" fill="#1a1a1e"/>
-            <circle cx="215" cy="106" r="33" fill="#ffe3cc"/>
-            <path d="M184 100 Q190 70 215 72 Q240 70 246 100 Q236 84 215 86 Q194 84 184 100Z" fill="#1a1a1e"/>
-            <g transform="translate(240 74)"><circle r="6" fill="#ff8fa3"/><circle r="2.5" fill="#ffd54f"/></g>
-            <g class="eyes" fill="#222"><ellipse cx="204" cy="108" rx="3" ry="4.2"/><ellipse cx="226" cy="108" rx="3" ry="4.2"/></g>
-            <path d="M199 102 Q204 99 209 101 M221 101 Q226 99 231 102" stroke="#222" stroke-width="1.6" fill="none" stroke-linecap="round"/>
-            <circle cx="196" cy="119" r="5" fill="#ff9aa8" opacity=".55"/><circle cx="234" cy="119" r="5" fill="#ff9aa8" opacity=".55"/>
-            <path d="M207 120 Q215 129 223 120" stroke="#c2185b" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+            <g class="head">
+              <circle cx="215" cy="102" r="43" fill="#fff"/>
+              <image href="img/photos/bride.jpg" x="168" y="55" width="94" height="94" clip-path="url(#cb)" preserveAspectRatio="xMidYMid slice"/>
+              <circle cx="215" cy="102" r="41" fill="none" stroke="#f3d98b" stroke-width="3"/>
+            </g>
+            <g transform="translate(246 70)"><circle r="7" fill="#ff8fa3"/><circle r="3" fill="#ffd54f"/></g>
             <path d="M190 162 L166 204" stroke="#ffe3cc" stroke-width="11" stroke-linecap="round"/>
             <circle cx="166" cy="206" r="7.5" fill="#ffdcc2"/>
             <path d="M240 162 L252 200" stroke="#ffe3cc" stroke-width="11" stroke-linecap="round"/>
@@ -261,7 +261,7 @@
     <p class="xi-foot">囍</p>
     <p class="thanks-line">Sự hiện diện của quý khách là niềm vinh hạnh của gia đình chúng tôi!</p>
     <button class="btn ghost light sm" id="btnShare">Chia sẻ thiệp</button>
-    <p class="release">Bản cập nhật <!--rel-->v12 · 11/11/2026 22:33<!--/rel--></p>
+    <p class="release">Bản cập nhật <!--rel-->v13 · 11/11/2026 22:53<!--/rel--></p>
   </footer>
 </main>
 

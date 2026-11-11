@@ -198,6 +198,9 @@ img{display:block;max-width:100%}
 @keyframes hup{0%{opacity:0;transform:translateY(20px) scale(.5)}20%{opacity:1}100%{opacity:0;transform:translateY(-55px) scale(1.2)}}
 .toon .sp text{transform-origin:center;animation:twinkle 2.6s infinite}
 .toon .sp text:nth-child(2){animation-delay:.6s}.toon .sp text:nth-child(3){animation-delay:1.2s}.toon .sp text:nth-child(4){animation-delay:1.8s}
+.toon .head{transform-box:fill-box;transform-origin:50% 90%;animation:nod 3s ease-in-out infinite}
+.toon .bride .head{animation-delay:.5s;animation-direction:reverse}
+@keyframes nod{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(3deg)}}
 .toon.jump .duo{animation:jump .7s}
 @keyframes jump{30%{transform:translateY(-26px) rotate(-3deg)}60%{transform:translateY(0) rotate(3deg)}80%{transform:translateY(-8px)}}
 .toon-cap{margin-top:6px;font:italic 500 .92rem 'Playfair Display',serif}
