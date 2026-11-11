@@ -240,11 +240,35 @@
       if (Array.isArray(list)) { wishes = list; renderWishes(); }
     }).catch(function () {});
   }
+  /* ---- Chống spam ---- */
+  var loadedAt = Date.now();
+  var deviceId = (store.get("dev") || (function () { var d = Math.random().toString(36).slice(2) + Date.now().toString(36); store.set("dev", d); return d; })());
+  var BAD = /(https?:|www\.|\.com\b|\.net\b|\.vn\b|\.xyz\b|\.ru\b|t\.me|zalo\.me|bit\.ly)/i;
+  function warn(text) {
+    var th = $("#thanks"); th.className = "thanks warn"; th.textContent = text; th.hidden = false;
+  }
+  function spamCheck(name, msg) {
+    var now = Date.now(), log = (store.get("sendlog") || []).filter(function (t) { return now - t < 864e5; });
+    if (now - loadedAt < 4000) return "Bạn gửi hơi nhanh, vui lòng thử lại sau vài giây nhé.";
+    if (log.length && now - log[log.length - 1] < 60000) return "Bạn vừa gửi xong, vui lòng đợi " + Math.ceil((60000 - (now - log[log.length - 1])) / 1000) + " giây rồi gửi tiếp nhé.";
+    if (log.length >= 3) return "Bạn đã gửi đủ 3 lần trong hôm nay. Cảm ơn bạn rất nhiều 💛";
+    if (name.length < 2 || BAD.test(name) || /(.)\1{7,}/.test(name)) return "Tên chưa hợp lệ, bạn kiểm tra lại giúp mình nhé.";
+    if (msg && (BAD.test(msg) || /(.)\1{9,}/.test(msg))) return "Lời chúc không được chứa đường link hoặc ký tự lặp quá nhiều.";
+    if (msg && msg === store.get("lastmsg")) return "Lời chúc này bạn đã gửi rồi, hãy viết thêm một lời mới nhé.";
+    return "";
+  }
   $("#rsvpForm").addEventListener("submit", function (e) {
     e.preventDefault();
     var name = $("#fName").value.trim(), msg = $("#fMsg").value.trim(), go2 = $("#fGo").value;
     if (!name) return;
-    var rec = { name: name, side: $("#fSide").value, go: go2, num: $("#fNum").value, msg: msg };
+    if ($("#fWeb").value) { e.target.reset(); return; } /* bẫy bot: ô ẩn bị điền */
+    var bad = spamCheck(name, msg);
+    if (bad) { warn(bad); return; }
+    var sent = (store.get("sendlog") || []).filter(function (t) { return Date.now() - t < 864e5; });
+    sent.push(Date.now()); store.set("sendlog", sent); if (msg) store.set("lastmsg", msg);
+    var sb = e.target.querySelector("button[type=submit]"); sb.disabled = true; setTimeout(function () { sb.disabled = false; }, 8000);
+    $("#thanks").className = "thanks";
+    var rec = { name: name, side: $("#fSide").value, go: go2, num: $("#fNum").value, msg: msg, dev: deviceId, took: Date.now() - loadedAt };
     if (SHEET_URL) {
       fetch(SHEET_URL, { method: "POST", mode: "no-cors", headers: { "Content-Type": "text/plain" }, body: JSON.stringify(rec) }).catch(function () {});
     } else {

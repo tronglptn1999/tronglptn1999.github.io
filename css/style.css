@@ -148,6 +148,9 @@ img{display:block;max-width:100%}
 .form input,.form select,.form textarea{width:100%;padding:11px 13px;border:1px solid #e0cfa6;border-radius:10px;font:inherit;background:#fff;color:var(--ink)}
 .form input:focus,.form select:focus,.form textarea:focus{outline:2px solid var(--gold2)}
 .form .btn{justify-self:center;margin-top:4px}
+.form .btn:disabled{opacity:.6;cursor:wait}
+.hp{position:absolute!important;left:-9999px;width:1px;height:1px;opacity:0;pointer-events:none}
+.thanks.warn{border-color:#c21a2b;color:#8a0c0c;background:#fff0f0}
 .thanks{margin-top:16px;background:#fff;border:1px dashed var(--gold);border-radius:12px;padding:14px;font-size:.9rem}
 .wishes{display:grid;gap:10px}
 .wish{background:var(--cream2);color:var(--red2);border-left:3px solid var(--gold);padding:10px 14px;border-radius:8px;font-size:.88rem}

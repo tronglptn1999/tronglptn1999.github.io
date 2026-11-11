@@ -174,11 +174,8 @@
             <path d="M72 158 L63 208" stroke="#26262c" stroke-width="15" stroke-linecap="round"/><circle cx="62" cy="212" r="7.5" fill="#ffdcc2"/>
             <path d="M138 158 L166 204" stroke="#26262c" stroke-width="15" stroke-linecap="round"/>
             <rect x="97" y="124" width="16" height="14" fill="#ffdcc2"/>
-            <g class="head">
-              <circle cx="105" cy="96" r="43" fill="#fff"/>
-              <image href="img/photos/groom.jpg" x="58" y="49" width="94" height="94" clip-path="url(#cg)" preserveAspectRatio="xMidYMid slice"/>
-              <circle cx="105" cy="96" r="41" fill="none" stroke="#f3d98b" stroke-width="3"/>
-            </g>
+            <rect x="94" y="104" width="22" height="50" rx="8" fill="#e4bfa8"/>
+            <g class="head"><image href="img/photos/groom-cut.png" x="30" y="14" width="150" height="150"/></g>
           </g>
           <g class="bride">
             <g class="dress">
@@ -188,12 +185,9 @@
             <path d="M182 182 Q215 168 248 182" fill="none" stroke="#e8cf92" stroke-width="2"/>
             <rect x="207" y="126" width="16" height="14" fill="#ffe3cc"/>
             <path d="M178 66 Q215 48 252 66 Q268 150 262 214 Q244 130 215 76 Q186 130 168 214 Q162 150 178 66Z" fill="#fff" stroke="#eadcc2" stroke-width="1.5" opacity=".85"/>
-            <g class="head">
-              <circle cx="215" cy="102" r="43" fill="#fff"/>
-              <image href="img/photos/bride.jpg" x="168" y="55" width="94" height="94" clip-path="url(#cb)" preserveAspectRatio="xMidYMid slice"/>
-              <circle cx="215" cy="102" r="41" fill="none" stroke="#f3d98b" stroke-width="3"/>
-            </g>
-            <g transform="translate(246 70)"><circle r="7" fill="#ff8fa3"/><circle r="3" fill="#ffd54f"/></g>
+            <rect x="204" y="106" width="22" height="48" rx="8" fill="#f0cdbd"/>
+            <g class="head"><image href="img/photos/bride-cut.png" x="147" y="18" width="135" height="135"/></g>
+            <g transform="translate(250 66)"><circle r="7" fill="#ff8fa3"/><circle r="3" fill="#ffd54f"/></g>
             <path d="M190 162 L166 204" stroke="#ffe3cc" stroke-width="11" stroke-linecap="round"/>
             <circle cx="166" cy="206" r="7.5" fill="#ffdcc2"/>
             <path d="M240 162 L252 200" stroke="#ffe3cc" stroke-width="11" stroke-linecap="round"/>
@@ -215,7 +209,8 @@
     <div class="panel rv">
       <h2 class="ptitle">Xác nhận tham dự</h2>
       <form id="rsvpForm" class="form">
-        <input id="fName" required maxlength="60" placeholder="Tên của bạn / gia đình" aria-label="Tên">
+        <input id="fName" required minlength="2" maxlength="60" placeholder="Tên của bạn / gia đình" aria-label="Tên">
+        <input id="fWeb" class="hp" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
         <div class="two">
           <select id="fSide" aria-label="Khách của"><option>Khách nhà trai</option><option>Khách nhà gái</option></select>
           <select id="fNum" aria-label="Số người"></select>
@@ -261,7 +256,7 @@
     <p class="xi-foot">囍</p>
     <p class="thanks-line">Sự hiện diện của quý khách là niềm vinh hạnh của gia đình chúng tôi!</p>
     <button class="btn ghost light sm" id="btnShare">Chia sẻ thiệp</button>
-    <p class="release">Bản cập nhật <!--rel-->v13 · 11/11/2026 22:53<!--/rel--></p>
+    <p class="release">Bản cập nhật <!--rel-->v14 · 12/11/2026 00:24<!--/rel--></p>
   </footer>
 </main>
 
