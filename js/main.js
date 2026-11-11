@@ -37,6 +37,7 @@
       window.scrollTo(0, 0);
       observe();
       petals(30);
+      confetti(60);
     }, 1300);
     var p = bgm.play();
     if (p && p.then) p.then(function () { musicBtn.classList.add("on"); }).catch(function () {});
@@ -73,7 +74,7 @@
   }
 
   /* Lấp lánh ở ảnh bìa */
-  var heroEl = $(".hero");
+  var heroEl = $(".arch");
   for (var s = 0; s < 26; s++) {
     var sp = document.createElement("i");
     sp.className = "spark";
@@ -87,12 +88,56 @@
   qs.innerHTML = qs.textContent.split(" ").map(function (w, i) { return '<span class="w" style="--k:' + i + '">' + w + "</span>"; }).join(" ");
 
   /* Thanh tiến độ + hero mờ dần khi cuộn */
-  var bar = $("#progress"), heroText = $(".hero-text");
+  var bar = $("#progress");
   window.addEventListener("scroll", function () {
     var y = window.scrollY, max = document.documentElement.scrollHeight - innerHeight;
     bar.style.transform = "scaleX(" + (max > 0 ? y / max : 0) + ")";
-    if (y < innerHeight) { heroText.style.transform = "translateY(" + y * 0.25 + "px)"; heroText.style.opacity = Math.max(0, 1 - y / (innerHeight * 0.7)); }
   }, { passive: true });
+
+  /* Confetti */
+  function confetti(n) {
+    var cols = ["#b3122e", "#f3d98b", "#fff", "#e0243f", "#d9b25a", "#f8d7de"];
+    for (var i = 0; i < n; i++) {
+      var c = document.createElement("i");
+      c.className = "cf";
+      c.style.cssText = "left:" + Math.random() * 100 + "vw;background:" + cols[i % cols.length] +
+        ";animation-duration:" + (2.5 + Math.random() * 2.5) + "s;animation-delay:" + Math.random() * .8 +
+        "s;--dx:" + (Math.random() * 200 - 100) + "px;--rt:" + (Math.random() * 900 - 450) + "deg";
+      document.body.appendChild(c);
+      (function (el) { setTimeout(function () { el.remove(); }, 6500); })(c);
+    }
+  }
+
+  /* Hộp quà mừng: bấm để mở */
+  var gb = $("#giftbox");
+  function openGift() {
+    if (gb.classList.contains("open")) return;
+    gb.classList.add("open");
+    confetti(70);
+    setTimeout(function () { var g = $("#gifts"); g.hidden = false; g.querySelectorAll(".rv").forEach(function (e) { e.classList.add("in"); }); }, 650);
+  }
+  gb.addEventListener("click", openGift);
+  gb.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openGift(); } });
+
+  /* Thêm vào lịch (.ics) */
+  $("#btnIcs").addEventListener("click", function () {
+    var ev = [
+      ["20261128T160000", "20261128T190000", "Bữa cơm thân mật - Nhà gái (Quang Trọng & Thu Trang)", "Tư gia nhà gái, Xóm Kha Sơn, Xã Kha Sơn, Thái Nguyên"],
+      ["20261128T173000", "20261128T203000", "Bữa cơm thân mật - Nhà trai (Quang Trọng & Thu Trang)", "Tư gia nhà trai, Xóm Lương Tạ, Xã Kha Sơn, Thái Nguyên"],
+      ["20261129T090000", "20261129T110000", "Lễ Vu Quy - Thu Trang", "Tư gia nhà gái, Xóm Kha Sơn, Xã Kha Sơn, Thái Nguyên"],
+      ["20261129T110000", "20261129T133000", "Lễ Thành Hôn - Quang Trọng", "Tư gia nhà trai, Xóm Lương Tạ, Xã Kha Sơn, Thái Nguyên"]
+    ];
+    var s = "BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//Thiep cuoi//VI\r\n";
+    ev.forEach(function (e, i) {
+      s += "BEGIN:VEVENT\r\nUID:tt-" + i + "@thiep-cuoi\r\nDTSTAMP:20261111T000000Z\r\nDTSTART:" + e[0] + "\r\nDTEND:" + e[1] +
+        "\r\nSUMMARY:" + e[2].replace(/,/g, "\\,") + "\r\nLOCATION:" + e[3].replace(/,/g, "\\,") + "\r\nEND:VEVENT\r\n";
+    });
+    s += "END:VCALENDAR";
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(new Blob([s], { type: "text/calendar;charset=utf-8" }));
+    a.download = "dam-cuoi-quang-trong-thu-trang.ics";
+    document.body.appendChild(a); a.click(); a.remove();
+  });
 
   /* Nghiêng nhẹ thẻ sự kiện theo con trỏ (máy tính) */
   document.querySelectorAll(".event").forEach(function (c) {

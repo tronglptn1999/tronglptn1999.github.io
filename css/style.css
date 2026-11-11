@@ -212,5 +212,51 @@ img{display:block;max-width:100%}
 @keyframes jump{30%{transform:translateY(-26px) rotate(-3deg)}60%{transform:translateY(0) rotate(3deg)}80%{transform:translateY(-8px)}}
 .toon-cap{margin-top:6px;font:italic 500 .95rem 'Playfair Display',serif;color:var(--green)}
 .toon-cap small{display:block;font:300 .7rem 'Be Vietnam Pro';color:#999}
+/* ===== phong cách Song Hỷ (tham khảo mẫu) ===== */
+:root{--cream:#fff1dc}
+.invite{border-inline:8px solid var(--red2);background:var(--cream)}
+.hero{height:auto;min-height:100svh;max-height:none;background:var(--cream);color:var(--red2);padding:34px 0 64px;align-items:center;overflow:hidden}
+.hero .xi-bg,.tint::before{font-family:'Noto Serif SC','Songti SC',serif;font-weight:900}
+.xi-bg{position:absolute;right:-30px;top:30px;font-size:340px;line-height:1;color:rgba(179,18,46,.07);pointer-events:none}
+.hero-in{position:relative;width:100%;padding:0 22px;text-align:center}
+.hero .kicker,.hero .hero-date{background:none;-webkit-text-fill-color:currentColor;color:var(--red2);animation:up 1s var(--d,0s) forwards}
+.hero .kicker{letter-spacing:.3em;font-size:.68rem;margin-bottom:14px}
+.names-row{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:center;font-weight:400;animation-name:up;filter:none}
+.names-row.anim{filter:none;animation-name:up}
+.names-row small{display:block;font-size:.7rem;letter-spacing:.12em;color:var(--red)}
+.names-row b{font:700 1.18rem 'Playfair Display',serif;letter-spacing:.06em;color:var(--red2)}
+.xi{font:900 2.2rem 'Noto Serif SC',serif;font-style:normal;color:var(--red);animation:beat 1.6s infinite}
+.arch{position:relative;margin:22px auto 20px;width:min(100%,330px);aspect-ratio:4/5;overflow:hidden;border-radius:999px 999px 18px 18px;border:3px solid var(--gold);box-shadow:0 0 0 6px var(--cream),0 0 0 8px var(--red2),0 18px 36px rgba(138,12,34,.28)}
+.arch img{width:100%;height:100%;object-fit:cover;object-position:center 30%;animation:kb 18s ease-in-out infinite alternate}
+.arch .spark{z-index:2}
+.hero .hero-date{font-size:1.35rem}
+.hero .hero-sub{color:#7a4a3a;opacity:1;font-size:.78rem}
+.hero .scroll-hint{color:var(--red2)}
+.tint{position:relative}
+.tint::before{content:"囍";position:absolute;left:-40px;top:20px;font-size:230px;line-height:1;color:rgba(179,18,46,.055);pointer-events:none}
+.heart{font:900 1.7rem 'Noto Serif SC',serif}
+.xi-foot{font:900 3.4rem 'Noto Serif SC',serif;color:var(--gold2);line-height:1;margin-bottom:6px!important}
+
+/* hộp quà */
+.giftbox{width:150px;margin:0 auto 6px;text-align:center;cursor:pointer;position:relative;animation:gbob 2.2s ease-in-out infinite;outline:none}
+@keyframes gbob{50%{transform:translateY(-6px)}}
+.gb-body{height:92px;border-radius:0 0 10px 10px;background:linear-gradient(90deg,#9c0e24 0 42%,var(--gold2) 42% 58%,#9c0e24 58%);display:grid;place-items:center;box-shadow:0 14px 24px rgba(138,12,34,.3)}
+.gb-body span{display:none}
+.gb-lid{position:relative;height:34px;width:112%;margin-left:-6%;border-radius:8px 8px 0 0;background:linear-gradient(90deg,#b3122e 0 42%,var(--gold2) 42% 58%,#b3122e 58%);transform-origin:left bottom;transition:transform .7s cubic-bezier(.3,1.6,.5,1)}
+.gb-lid i{position:absolute;left:50%;top:-22px;width:46px;height:30px;transform:translateX(-50%);background:radial-gradient(circle at 25% 60%,var(--gold2) 0 12px,transparent 13px),radial-gradient(circle at 75% 60%,var(--gold2) 0 12px,transparent 13px)}
+.giftbox p{margin-top:12px;font-size:.78rem;letter-spacing:.14em;color:var(--red2);animation:blinkp 1.6s infinite}
+@keyframes blinkp{50%{opacity:.35}}
+.giftbox.open{animation:none;pointer-events:none}
+.giftbox.open .gb-lid{transform:rotate(-70deg) translateY(-12px)}
+.giftbox.open p{opacity:0;animation:none}
+.giftbox.open .gb-body span{display:block;font:900 2rem 'Noto Serif SC',serif;color:var(--gold2)}
+.gifts:not([hidden]){animation:rise .8s}
+@keyframes rise{from{opacity:0;transform:translateY(24px)}}
+.gifts{margin-top:22px}
+
+/* nút lời chúc nổi + confetti */
+.fab-wish{position:fixed;right:14px;bottom:66px;z-index:60;width:42px;height:42px;border-radius:50%;background:#ff4d7a;display:grid;place-items:center;text-decoration:none;font-size:18px;box-shadow:0 4px 14px rgba(0,0,0,.35)}
+.cf{position:fixed;top:-14px;z-index:300;width:8px;height:12px;pointer-events:none;animation:cff linear forwards}
+@keyframes cff{to{transform:translate3d(var(--dx),105vh,0) rotate(var(--rt));opacity:.6}}
 @media(min-width:521px){.hero{border-radius:0}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv,.anim,.gallery figure{opacity:1;transform:none}}
