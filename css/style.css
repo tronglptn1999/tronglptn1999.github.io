@@ -184,5 +184,33 @@ img{display:block;max-width:100%}
 .heartfx{position:fixed;z-index:300;pointer-events:none;color:var(--red);font-size:20px;animation:hfly 1.2s ease-out forwards}
 @keyframes hfly{to{transform:translate(var(--hx),-110px) scale(1.5);opacity:0}}
 .hero-text{will-change:transform,opacity}
+/* ===== nhân vật hoạt hình ===== */
+.toon-sec{text-align:center;padding-bottom:40px}
+.bubble{display:inline-block;position:relative;background:#fff;border:2px solid var(--gold2);color:var(--red2);font:600 .9rem 'Be Vietnam Pro';padding:9px 18px;border-radius:20px;box-shadow:0 6px 16px rgba(179,18,46,.12);margin-bottom:14px;animation:bub 3s ease-in-out infinite}
+.bubble::after{content:"";position:absolute;left:50%;bottom:-9px;width:14px;height:14px;background:#fff;border-right:2px solid var(--gold2);border-bottom:2px solid var(--gold2);transform:translateX(-50%) rotate(45deg)}
+@keyframes bub{50%{transform:translateY(-5px)}}
+.toon{width:min(88%,340px);height:auto;cursor:pointer;overflow:visible;-webkit-tap-highlight-color:transparent}
+.toon .groom,.toon .bride,.toon .duo,.toon .dress,.toon .hearts text,.toon .sp text,.toon .eyes,.toon .bouquet{transform-box:fill-box;transform-origin:center bottom}
+.toon .duo{animation:sway 4s ease-in-out infinite;transform-origin:50% 100%}
+@keyframes sway{0%,100%{transform:rotate(-1.4deg)}50%{transform:rotate(1.4deg)}}
+.toon .groom{animation:bob 2s ease-in-out infinite}
+.toon .bride{animation:bob 2s ease-in-out .35s infinite}
+@keyframes bob{50%{transform:translateY(-6px)}}
+.toon .dress{animation:dress 3s ease-in-out infinite}
+@keyframes dress{50%{transform:scaleX(1.03)}}
+.toon .eyes{transform-origin:center center;animation:blink 4.2s infinite}
+.toon .bride .eyes{animation-delay:.6s}
+@keyframes blink{0%,92%,100%{transform:scaleY(1)}95%{transform:scaleY(.1)}}
+.toon .bouquet{transform-origin:left bottom;animation:wave 1.8s ease-in-out infinite}
+@keyframes wave{50%{transform:rotate(-7deg)}}
+.toon .hearts text{opacity:0;transform-origin:center;animation:hup 3.2s ease-out infinite}
+.toon .hearts .h2{animation-delay:1s}.toon .hearts .h3{animation-delay:2s}
+@keyframes hup{0%{opacity:0;transform:translateY(20px) scale(.5)}20%{opacity:1}100%{opacity:0;transform:translateY(-55px) scale(1.2)}}
+.toon .sp text{transform-origin:center;animation:twinkle 2.6s infinite}
+.toon .sp text:nth-child(2){animation-delay:.6s}.toon .sp text:nth-child(3){animation-delay:1.2s}.toon .sp text:nth-child(4){animation-delay:1.8s}
+.toon.jump .duo{animation:jump .7s}
+@keyframes jump{30%{transform:translateY(-26px) rotate(-3deg)}60%{transform:translateY(0) rotate(3deg)}80%{transform:translateY(-8px)}}
+.toon-cap{margin-top:6px;font:italic 500 .95rem 'Playfair Display',serif;color:var(--green)}
+.toon-cap small{display:block;font:300 .7rem 'Be Vietnam Pro';color:#999}
 @media(min-width:521px){.hero{border-radius:0}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv,.anim,.gallery figure{opacity:1;transform:none}}

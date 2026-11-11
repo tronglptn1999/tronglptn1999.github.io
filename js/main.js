@@ -103,6 +103,19 @@
     c.addEventListener("mouseleave", function () { c.style.transform = ""; });
   });
 
+  /* Chạm vào cặp đôi hoạt hình: nhảy + tim bay */
+  var toon = $("#toon");
+  toon.addEventListener("click", function (e) {
+    toon.classList.remove("jump"); void toon.getBoundingClientRect(); toon.classList.add("jump");
+    for (var k = 0; k < 6; k++) {
+      var h = document.createElement("i");
+      h.className = "heartfx"; h.textContent = "♥";
+      h.style.cssText = "left:" + (e.clientX - 10 + (Math.random() * 60 - 30)) + "px;top:" + (e.clientY - 10) + "px;--hx:" + (Math.random() * 100 - 50) + "px;animation-delay:" + k * 0.08 + "s";
+      document.body.appendChild(h);
+      (function (n) { setTimeout(function () { n.remove(); }, 1500); })(h);
+    }
+  });
+
   /* Trái tim bay lên khi chạm */
   document.addEventListener("click", function (e) {
     if (e.target.closest("button,a,input,select,textarea,#lb")) return;
