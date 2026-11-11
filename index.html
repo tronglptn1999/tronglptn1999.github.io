@@ -3,16 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#8a0c22">
+<meta name="theme-color" content="#8a0c0c">
 <title>Thiệp cưới Quang Trọng & Thu Trang</title>
 <meta name="description" content="Trân trọng kính mời bạn đến dự lễ cưới của Quang Trọng & Thu Trang — 28 & 29/11/2026 — Kha Sơn, Thái Nguyên.">
 <meta property="og:title" content="Thiệp cưới Quang Trọng & Thu Trang">
 <meta property="og:description" content="28 & 29.11.2026 · Xã Kha Sơn, Tỉnh Thái Nguyên">
 <meta property="og:image" content="img/photos/hero.jpg">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='48' fill='%23b3122e'/%3E%3Ctext x='50' y='66' font-size='46' text-anchor='middle' fill='%23f3d98b' font-family='serif' font-style='italic'%3ET%26T%3C/text%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='48' fill='%238a0c0c'/%3E%3Ctext x='50' y='66' font-size='46' text-anchor='middle' fill='%23f3d98b' font-family='serif' font-style='italic'%3ET%26T%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600&family=Great+Vibes&family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Noto+Serif+SC:wght@900&text=%E5%9B%8D&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600&family=Great+Vibes&family=Playfair+Display:ital,wght@0,500;0,700;0,800;1,500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@900&text=%E5%9B%8D&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body class="locked">
@@ -34,196 +35,208 @@
     </div>
     <div class="env-front"></div>
     <div class="env-flap"></div>
-    <button class="seal" id="btnOpen" aria-label="Chạm để mở thiệp"><span class="script">T&amp;T</span></button>
+    <button class="seal" id="btnOpen" aria-label="Chạm để mở thiệp"><span>囍</span></button>
   </div>
   <p class="tap-hint">Chạm vào con dấu để mở thiệp</p>
 </section>
 
 <main id="invite" class="invite" hidden>
 
-  <!-- HERO -->
+  <!-- HERO: nền kem, tên, ảnh vòm, sóng đỏ -->
   <header class="hero">
     <span class="xi-bg" aria-hidden="true">囍</span>
     <div class="hero-in">
-      <p class="kicker anim" style="--d:.2s">Trân trọng kính mời</p>
-      <h1 class="names-row anim" style="--d:.45s">
+      <h1 class="names-row anim" style="--d:.2s">
         <span><small>Chú rể</small><b>QUANG TRỌNG</b></span>
         <i class="xi">囍</i>
         <span><small>Cô dâu</small><b>THU TRANG</b></span>
       </h1>
-      <div class="arch anim" style="--d:.8s">
-        <img src="img/photos/hero.jpg" alt="Quang Trọng và Thu Trang">
+      <div class="tabphoto anim" style="--d:.55s">
+        <div class="tp-in"><img src="img/photos/hero.jpg" alt="Quang Trọng và Thu Trang"></div>
       </div>
-      <p class="hero-date anim" style="--d:1.1s">28 · 29 . 11 . 2026</p>
-      <p class="hero-sub anim" style="--d:1.3s">Tức 20 &amp; 21 tháng 10 năm Bính Ngọ</p>
     </div>
-    <a href="#couple" class="scroll-hint" aria-label="Cuộn xuống">⌄</a>
+    <svg class="wave" viewBox="0 0 400 150" preserveAspectRatio="none" aria-hidden="true">
+      <path d="M0,40 C45,40 75,62 105,92 C135,120 175,126 200,150 C225,126 265,120 295,92 C325,62 355,40 400,40 L400,150 L0,150Z" fill="#8a0c0c"/>
+      <path d="M0,40 C45,40 75,62 105,92 C135,120 175,126 200,150 C225,126 265,120 295,92 C325,62 355,40 400,40" fill="none" stroke="#e9c37a" stroke-width="3"/>
+    </svg>
+    <div class="hero-xi" aria-hidden="true"><span>囍</span><span>囍</span></div>
   </header>
 
-  <!-- LỜI MỜI + CẶP ĐÔI -->
-  <section class="sec" id="couple">
-    <p class="lead rv">Bữa cơm thân mật và lễ cưới của chúng mình.<br>Sự hiện diện của bạn là niềm vinh hạnh của hai gia đình.</p>
+  <!-- KHUNG 1: THÔNG TIN LỄ CƯỚI -->
+  <section class="blk">
+    <div class="panel rv">
+      <h2 class="ptitle">Thông tin lễ cưới</h2>
+      <div class="parents">
+        <div><small>Ông Bà</small><b>Ngô Quang Lượng</b><b>Trần Thị Viên</b><em>Nhà trai</em></div>
+        <i class="vline"></i>
+        <div><small>Ông Bà</small><b>Đinh Đình Dũng</b><b>Ngô Thị Chiến</b><em>Nhà gái</em></div>
+      </div>
+      <p class="inform">Hai gia đình trân trọng báo tin lễ thành hôn của hai con chúng tôi</p>
+      <p class="pname script">Ngô Quang Trọng</p>
+      <p class="amp script">&amp;</p>
+      <p class="pname script">Đinh Thu Trang</p>
 
-    <div class="couple">
-      <div class="person rv" style="--i:0">
-        <img src="img/photos/groom.jpg" alt="Chú rể Quang Trọng">
-        <h3 class="script">Quang Trọng</h3>
-        <small>Chú rể</small>
-        <p>Con ông Ngô Quang Lượng<br>&amp; bà Trần Thị Viên</p>
+      <div class="ev">
+        <p class="evt">LỄ VU QUY</p>
+        <p class="evp">TƯ GIA NHÀ GÁI</p>
+        <p class="evs">Xóm Kha Sơn, Xã Kha Sơn, Tỉnh Thái Nguyên</p>
+        <p class="evh">VÀO LÚC <b>09:00</b> · CHỦ NHẬT</p>
+        <div class="bigdate"><b>29</b><span><i>THÁNG 11</i><i>2026</i></span></div>
+        <p class="lunar">(Tức ngày 21 tháng 10 năm Bính Ngọ)</p>
+        <a class="mapbtn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=X%C3%B3m+Kha+S%C6%A1n+X%C3%A3+Kha+S%C6%A1n+Th%C3%A1i+Nguy%C3%AAn">Chỉ đường</a>
       </div>
-      <div class="heart rv" style="--i:1">囍</div>
-      <div class="person rv" style="--i:2">
-        <img src="img/photos/bride.jpg" alt="Cô dâu Thu Trang">
-        <h3 class="script">Thu Trang</h3>
-        <small>Cô dâu</small>
-        <p>Con ông Đinh Đình Dũng<br>&amp; bà Ngô Thị Chiến</p>
+      <div class="ev">
+        <p class="evt">LỄ THÀNH HÔN</p>
+        <p class="evp">TƯ GIA NHÀ TRAI</p>
+        <p class="evs">Xóm Lương Tạ, Xã Kha Sơn, Tỉnh Thái Nguyên</p>
+        <p class="evh">VÀO LÚC <b>11:00</b> · CHỦ NHẬT</p>
+        <div class="bigdate"><b>29</b><span><i>THÁNG 11</i><i>2026</i></span></div>
+        <p class="lunar">(Tức ngày 21 tháng 10 năm Bính Ngọ)</p>
+        <a class="mapbtn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=X%C3%B3m+L%C6%B0%C6%A1ng+T%E1%BA%A1+X%C3%A3+Kha+S%C6%A1n+Th%C3%A1i+Nguy%C3%AAn">Chỉ đường</a>
       </div>
+      <p class="xi-sm">囍</p>
     </div>
   </section>
 
-  <!-- LỊCH TRÌNH -->
-  <section class="sec tint">
-    <h2 class="title rv">Lịch trình hôn lễ</h2>
-    <div class="events">
-      <article class="event rv" style="--i:0">
-        <span class="tag">Nhà gái</span>
-        <h3>Lễ Vu Quy</h3>
-        <div class="row"><b>28.11</b><div><strong>16:00 · Thứ Bảy</strong><small>Bữa cơm thân mật · 20/10 ÂL</small></div></div>
-        <div class="row"><b>29.11</b><div><strong>09:00 · Chủ Nhật</strong><small>Lễ Vu Quy · 21/10 ÂL</small></div></div>
-        <p class="addr">Tư gia nhà gái<br>Xóm Kha Sơn, Xã Kha Sơn, Thái Nguyên</p>
-        <a class="btn ghost sm" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=X%C3%B3m+Kha+S%C6%A1n+X%C3%A3+Kha+S%C6%A1n+Th%C3%A1i+Nguy%C3%AAn">Chỉ đường</a>
-      </article>
-      <article class="event rv" style="--i:1">
-        <span class="tag">Nhà trai</span>
-        <h3>Lễ Thành Hôn</h3>
-        <div class="row"><b>28.11</b><div><strong>17:30 · Thứ Bảy</strong><small>Bữa cơm thân mật · 20/10 ÂL</small></div></div>
-        <div class="row"><b>29.11</b><div><strong>11:00 · Chủ Nhật</strong><small>Lễ Thành Hôn · 21/10 ÂL</small></div></div>
-        <p class="addr">Tư gia nhà trai<br>Xóm Lương Tạ, Xã Kha Sơn, Thái Nguyên</p>
-        <a class="btn ghost sm" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=X%C3%B3m+L%C6%B0%C6%A1ng+T%E1%BA%A1+X%C3%A3+Kha+S%C6%A1n+Th%C3%A1i+Nguy%C3%AAn">Chỉ đường</a>
-      </article>
+  <!-- ALBUM: băng chuyền 3D -->
+  <section class="red-sec">
+    <h2 class="gtitle rv">Album ảnh</h2>
+    <div class="flow rv" id="flow">
+      <div class="flow-stage" id="flowStage"></div>
+      <button class="fl-btn fl-p" id="flP" aria-label="Ảnh trước">‹</button>
+      <button class="fl-btn fl-n" id="flN" aria-label="Ảnh sau">›</button>
+    </div>
+    <p class="flow-count" id="flCount">1 / 16</p>
+  </section>
+
+  <!-- KHUNG 2: BỮA CƠM THÂN MẬT -->
+  <section class="blk">
+    <div class="panel rv">
+      <h2 class="ptitle">Bữa cơm thân mật</h2>
+      <p class="inform">Trân trọng kính mời bạn đến dự bữa cơm thân mật chung vui cùng gia đình chúng tôi</p>
+      <div class="ev">
+        <p class="evt">NHÀ GÁI</p>
+        <p class="evs">Xóm Kha Sơn, Xã Kha Sơn, Tỉnh Thái Nguyên</p>
+        <p class="evh">VÀO LÚC <b>16:00</b> · THỨ BẢY</p>
+        <div class="bigdate"><b>28</b><span><i>THÁNG 11</i><i>2026</i></span></div>
+        <p class="lunar">(Tức ngày 20 tháng 10 năm Bính Ngọ)</p>
+      </div>
+      <div class="ev">
+        <p class="evt">NHÀ TRAI</p>
+        <p class="evs">Xóm Lương Tạ, Xã Kha Sơn, Tỉnh Thái Nguyên</p>
+        <p class="evh">VÀO LÚC <b>17:30</b> · THỨ BẢY</p>
+        <div class="bigdate"><b>28</b><span><i>THÁNG 11</i><i>2026</i></span></div>
+        <p class="lunar">(Tức ngày 20 tháng 10 năm Bính Ngọ)</p>
+      </div>
+      <p class="xi-sm">囍</p>
     </div>
   </section>
 
-  <!-- LỊCH + ĐẾM NGƯỢC -->
-  <section class="sec">
-    <h2 class="title rv">Tháng 11 · 2026</h2>
-    <div class="calendar rv" id="calendar"></div>
-    <p class="center rv"><button class="btn ghost sm" id="btnIcs" type="button">+ Thêm vào lịch</button></p>
+  <!-- ĐẾM NGƯỢC + LỊCH -->
+  <section class="red-sec">
+    <h2 class="gtitle rv">Cùng đếm ngược</h2>
     <div class="countdown rv">
       <div><b id="cd-d">--</b><span>Ngày</span></div>
       <div><b id="cd-h">--</b><span>Giờ</span></div>
       <div><b id="cd-m">--</b><span>Phút</span></div>
       <div><b id="cd-s">--</b><span>Giây</span></div>
     </div>
+    <h2 class="gtitle rv" style="margin-top:34px">Tháng 11 / 2026</h2>
+    <div class="calendar rv" id="calendar"></div>
+    <p class="center rv"><button class="btn gold sm" id="btnIcs" type="button">+ Thêm vào lịch</button></p>
   </section>
 
   <!-- NHÂN VẬT HOẠT HÌNH -->
-  <section class="sec tint toon-sec">
-    <div class="bubble rv">Mời bạn đến chung vui nhé! 💕</div>
-    <svg id="toon" class="toon rv" viewBox="0 0 320 290" role="img" aria-label="Chú rể và cô dâu hoạt hình nắm tay nhau">
-      <ellipse class="shadow" cx="160" cy="272" rx="120" ry="9" fill="rgba(0,0,0,.12)"/>
-      <!-- hiệu ứng tim & lấp lánh -->
-      <g class="hearts" fill="#e0243f">
-        <text class="h1" x="150" y="80" font-size="22">♥</text>
-        <text class="h2" x="172" y="80" font-size="15">♥</text>
-        <text class="h3" x="132" y="80" font-size="13">♥</text>
-      </g>
-      <g class="sp" fill="#f3d98b">
-        <text x="30" y="60" font-size="14">✦</text><text x="285" y="90" font-size="16">✦</text><text x="270" y="30" font-size="10">✦</text><text x="40" y="150" font-size="10">✦</text>
-      </g>
-
-      <g class="duo">
-        <!-- CHÚ RỂ -->
-        <g class="groom">
-          <rect x="88" y="214" width="15" height="44" rx="6" fill="#222"/><rect x="110" y="214" width="15" height="44" rx="6" fill="#222"/>
-          <ellipse cx="92" cy="260" rx="13" ry="6" fill="#111"/><ellipse cx="122" cy="260" rx="13" ry="6" fill="#111"/>
-          <path d="M70 152 Q105 136 140 152 L147 222 L63 222Z" fill="#26262c"/>
-          <path d="M94 143 L105 178 L116 143Z" fill="#fff"/>
-          <path d="M105 148 L92 142 L92 156Z M105 148 L118 142 L118 156Z" fill="#b3122e"/><circle cx="105" cy="148" r="3.5" fill="#8a0c22"/>
-          <path d="M72 158 L63 208" stroke="#26262c" stroke-width="15" stroke-linecap="round"/><circle cx="62" cy="212" r="7.5" fill="#ffdcc2"/>
-          <path d="M138 158 L166 204" class="armg" stroke="#26262c" stroke-width="15" stroke-linecap="round"/>
-          <rect x="97" y="124" width="16" height="14" fill="#ffdcc2"/>
-          <circle cx="105" cy="100" r="35" fill="#ffe3cc"/>
-          <circle cx="70" cy="104" r="6" fill="#ffe3cc"/><circle cx="140" cy="104" r="6" fill="#ffe3cc"/>
-          <path d="M69 98 Q68 60 105 62 Q142 60 141 98 Q134 78 105 79 Q76 78 69 98Z" fill="#1d1d22"/>
-          <g fill="none" stroke="#222" stroke-width="2.4"><circle cx="92" cy="104" r="10"/><circle cx="118" cy="104" r="10"/><path d="M102 103 L108 103"/></g>
-          <g class="eyes" fill="#222"><ellipse cx="92" cy="104" rx="3.2" ry="4.2"/><ellipse cx="118" cy="104" rx="3.2" ry="4.2"/></g>
-          <circle cx="82" cy="117" r="5" fill="#ff9aa8" opacity=".5"/><circle cx="128" cy="117" r="5" fill="#ff9aa8" opacity=".5"/>
-          <path d="M96 118 Q105 128 114 118" stroke="#b3122e" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+  <section class="blk">
+    <div class="panel toon-panel rv">
+      <div class="bubble">Mời bạn đến chung vui nhé! 💕</div>
+      <svg id="toon" class="toon" viewBox="0 0 320 290" role="img" aria-label="Chú rể và cô dâu hoạt hình nắm tay nhau">
+        <ellipse class="shadow" cx="160" cy="272" rx="120" ry="9" fill="rgba(0,0,0,.12)"/>
+        <g class="hearts" fill="#e0243f">
+          <text class="h1" x="150" y="80" font-size="22">♥</text>
+          <text class="h2" x="172" y="80" font-size="15">♥</text>
+          <text class="h3" x="132" y="80" font-size="13">♥</text>
         </g>
-
-        <!-- CÔ DÂU -->
-        <g class="bride">
-          <g class="dress">
-            <path d="M215 150 Q190 160 182 182 Q165 240 138 264 L292 264 Q266 240 248 182 Q240 160 215 150Z" fill="#fff" stroke="#eadcc2" stroke-width="2"/>
-            <path d="M196 186 Q215 200 234 186 M188 214 Q215 232 242 214 M178 240 Q215 262 252 240" fill="none" stroke="#e8cf92" stroke-width="2" stroke-linecap="round"/>
-          </g>
-          <path d="M182 182 Q215 168 248 182" fill="none" stroke="#e8cf92" stroke-width="2"/>
-          <rect x="207" y="126" width="16" height="14" fill="#ffe3cc"/>
-          <path d="M178 66 Q215 48 252 66 Q268 150 262 214 Q244 130 215 76 Q186 130 168 214 Q162 150 178 66Z" fill="#fff" stroke="#eadcc2" stroke-width="1.5" opacity=".85"/>
-          <path d="M180 104 Q176 58 215 60 Q254 58 250 104 L256 168 Q240 156 238 122 L192 122 Q190 156 174 168Z" fill="#1a1a1e"/>
-          <circle cx="215" cy="106" r="33" fill="#ffe3cc"/>
-          <path d="M184 100 Q190 70 215 72 Q240 70 246 100 Q236 84 215 86 Q194 84 184 100Z" fill="#1a1a1e"/>
-          <g transform="translate(240 74)"><circle r="6" fill="#ff8fa3"/><circle r="2.5" fill="#ffd54f"/></g>
-          <g class="eyes" fill="#222"><ellipse cx="204" cy="108" rx="3" ry="4.2"/><ellipse cx="226" cy="108" rx="3" ry="4.2"/></g>
-          <path d="M199 102 Q204 99 209 101 M221 101 Q226 99 231 102" stroke="#222" stroke-width="1.6" fill="none" stroke-linecap="round"/>
-          <circle cx="196" cy="119" r="5" fill="#ff9aa8" opacity=".55"/><circle cx="234" cy="119" r="5" fill="#ff9aa8" opacity=".55"/>
-          <path d="M207 120 Q215 129 223 120" stroke="#c2185b" stroke-width="2.6" fill="none" stroke-linecap="round"/>
-          <path d="M190 162 L166 204" stroke="#ffe3cc" stroke-width="11" stroke-linecap="round"/>
-          <circle cx="166" cy="206" r="7.5" fill="#ffdcc2"/>
-          <path d="M240 162 L252 200" stroke="#ffe3cc" stroke-width="11" stroke-linecap="round"/>
-          <g class="bouquet">
-            <path d="M254 204 L262 238" stroke="#3f8f4f" stroke-width="4" stroke-linecap="round"/>
-            <circle cx="248" cy="192" r="9" fill="#e0243f"/><circle cx="262" cy="188" r="9" fill="#ff6b81"/><circle cx="256" cy="178" r="9" fill="#b3122e"/><circle cx="270" cy="200" r="8" fill="#ff8fa3"/>
-            <circle cx="248" cy="192" r="3" fill="#ffd54f"/><circle cx="262" cy="188" r="3" fill="#ffd54f"/><circle cx="256" cy="178" r="3" fill="#ffd54f"/>
-          </g>
-          <circle cx="252" cy="203" r="7" fill="#ffdcc2"/>
+        <g class="sp" fill="#d9a441">
+          <text x="30" y="60" font-size="14">✦</text><text x="285" y="90" font-size="16">✦</text><text x="270" y="30" font-size="10">✦</text><text x="40" y="150" font-size="10">✦</text>
         </g>
-      </g>
-    </svg>
-    <p class="toon-cap rv">Quang Trọng &amp; Thu Trang đang chờ bạn <small>(chạm vào hai bạn ấy nhé)</small></p>
-  </section>
-
-  <!-- TRÍCH DẪN ẢNH -->
-  <section class="quote">
-    <img src="img/photos/story.jpg" alt="" loading="lazy" class="quote-img">
-    <div class="quote-text rv">
-      <p class="script">“Yêu là cùng nhau nhìn về một hướng.”</p>
-      <small>Quang Trọng &amp; Thu Trang</small>
+        <g class="duo">
+          <g class="groom">
+            <rect x="88" y="214" width="15" height="44" rx="6" fill="#222"/><rect x="110" y="214" width="15" height="44" rx="6" fill="#222"/>
+            <ellipse cx="92" cy="260" rx="13" ry="6" fill="#111"/><ellipse cx="122" cy="260" rx="13" ry="6" fill="#111"/>
+            <path d="M70 152 Q105 136 140 152 L147 222 L63 222Z" fill="#26262c"/>
+            <path d="M94 143 L105 178 L116 143Z" fill="#fff"/>
+            <path d="M105 148 L92 142 L92 156Z M105 148 L118 142 L118 156Z" fill="#b3122e"/><circle cx="105" cy="148" r="3.5" fill="#8a0c22"/>
+            <path d="M72 158 L63 208" stroke="#26262c" stroke-width="15" stroke-linecap="round"/><circle cx="62" cy="212" r="7.5" fill="#ffdcc2"/>
+            <path d="M138 158 L166 204" stroke="#26262c" stroke-width="15" stroke-linecap="round"/>
+            <rect x="97" y="124" width="16" height="14" fill="#ffdcc2"/>
+            <circle cx="105" cy="100" r="35" fill="#ffe3cc"/>
+            <circle cx="70" cy="104" r="6" fill="#ffe3cc"/><circle cx="140" cy="104" r="6" fill="#ffe3cc"/>
+            <path d="M69 98 Q68 60 105 62 Q142 60 141 98 Q134 78 105 79 Q76 78 69 98Z" fill="#1d1d22"/>
+            <g fill="none" stroke="#222" stroke-width="2.4"><circle cx="92" cy="104" r="10"/><circle cx="118" cy="104" r="10"/><path d="M102 103 L108 103"/></g>
+            <g class="eyes" fill="#222"><ellipse cx="92" cy="104" rx="3.2" ry="4.2"/><ellipse cx="118" cy="104" rx="3.2" ry="4.2"/></g>
+            <circle cx="82" cy="117" r="5" fill="#ff9aa8" opacity=".5"/><circle cx="128" cy="117" r="5" fill="#ff9aa8" opacity=".5"/>
+            <path d="M96 118 Q105 128 114 118" stroke="#b3122e" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+          </g>
+          <g class="bride">
+            <g class="dress">
+              <path d="M215 150 Q190 160 182 182 Q165 240 138 264 L292 264 Q266 240 248 182 Q240 160 215 150Z" fill="#fff" stroke="#eadcc2" stroke-width="2"/>
+              <path d="M196 186 Q215 200 234 186 M188 214 Q215 232 242 214 M178 240 Q215 262 252 240" fill="none" stroke="#e8cf92" stroke-width="2" stroke-linecap="round"/>
+            </g>
+            <path d="M182 182 Q215 168 248 182" fill="none" stroke="#e8cf92" stroke-width="2"/>
+            <rect x="207" y="126" width="16" height="14" fill="#ffe3cc"/>
+            <path d="M178 66 Q215 48 252 66 Q268 150 262 214 Q244 130 215 76 Q186 130 168 214 Q162 150 178 66Z" fill="#fff" stroke="#eadcc2" stroke-width="1.5" opacity=".85"/>
+            <path d="M180 104 Q176 58 215 60 Q254 58 250 104 L256 168 Q240 156 238 122 L192 122 Q190 156 174 168Z" fill="#1a1a1e"/>
+            <circle cx="215" cy="106" r="33" fill="#ffe3cc"/>
+            <path d="M184 100 Q190 70 215 72 Q240 70 246 100 Q236 84 215 86 Q194 84 184 100Z" fill="#1a1a1e"/>
+            <g transform="translate(240 74)"><circle r="6" fill="#ff8fa3"/><circle r="2.5" fill="#ffd54f"/></g>
+            <g class="eyes" fill="#222"><ellipse cx="204" cy="108" rx="3" ry="4.2"/><ellipse cx="226" cy="108" rx="3" ry="4.2"/></g>
+            <path d="M199 102 Q204 99 209 101 M221 101 Q226 99 231 102" stroke="#222" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+            <circle cx="196" cy="119" r="5" fill="#ff9aa8" opacity=".55"/><circle cx="234" cy="119" r="5" fill="#ff9aa8" opacity=".55"/>
+            <path d="M207 120 Q215 129 223 120" stroke="#c2185b" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+            <path d="M190 162 L166 204" stroke="#ffe3cc" stroke-width="11" stroke-linecap="round"/>
+            <circle cx="166" cy="206" r="7.5" fill="#ffdcc2"/>
+            <path d="M240 162 L252 200" stroke="#ffe3cc" stroke-width="11" stroke-linecap="round"/>
+            <g class="bouquet">
+              <path d="M254 204 L262 238" stroke="#3f8f4f" stroke-width="4" stroke-linecap="round"/>
+              <circle cx="248" cy="192" r="9" fill="#e0243f"/><circle cx="262" cy="188" r="9" fill="#ff6b81"/><circle cx="256" cy="178" r="9" fill="#b3122e"/><circle cx="270" cy="200" r="8" fill="#ff8fa3"/>
+              <circle cx="248" cy="192" r="3" fill="#ffd54f"/><circle cx="262" cy="188" r="3" fill="#ffd54f"/><circle cx="256" cy="178" r="3" fill="#ffd54f"/>
+            </g>
+            <circle cx="252" cy="203" r="7" fill="#ffdcc2"/>
+          </g>
+        </g>
+      </svg>
+      <p class="toon-cap">Quang Trọng &amp; Thu Trang đang chờ bạn <small>(chạm vào hai bạn ấy nhé)</small></p>
     </div>
   </section>
 
-  <!-- ALBUM -->
-  <section class="sec">
-    <h2 class="title rv">Album cưới</h2>
-    <div class="gallery" id="gallery"></div>
-  </section>
-
-  <!-- RSVP -->
-  <section class="sec tint" id="rsvp">
-    <h2 class="title rv">Xác nhận tham dự</h2>
-    <form id="rsvpForm" class="form rv">
-      <input id="fName" required maxlength="60" placeholder="Tên của bạn / gia đình" aria-label="Tên">
-      <div class="two">
-        <select id="fSide" aria-label="Khách của"><option>Khách nhà trai</option><option>Khách nhà gái</option></select>
-        <select id="fNum" aria-label="Số người"></select>
-      </div>
-      <select id="fGo" aria-label="Tham dự"><option value="Có">Mình sẽ đến dự</option><option value="Không">Rất tiếc, mình không đến được</option></select>
-      <textarea id="fMsg" rows="3" maxlength="300" placeholder="Gửi lời chúc đến cô dâu chú rể…" aria-label="Lời chúc"></textarea>
-      <button class="btn" type="submit">Gửi xác nhận</button>
-    </form>
-    <p id="thanks" class="thanks" hidden></p>
+  <!-- KHUNG 3: RSVP -->
+  <section class="blk" id="rsvp">
+    <div class="panel rv">
+      <h2 class="ptitle">Xác nhận tham dự</h2>
+      <form id="rsvpForm" class="form">
+        <input id="fName" required maxlength="60" placeholder="Tên của bạn / gia đình" aria-label="Tên">
+        <div class="two">
+          <select id="fSide" aria-label="Khách của"><option>Khách nhà trai</option><option>Khách nhà gái</option></select>
+          <select id="fNum" aria-label="Số người"></select>
+        </div>
+        <select id="fGo" aria-label="Tham dự"><option value="Có">Mình sẽ đến dự</option><option value="Không">Rất tiếc, mình không đến được</option></select>
+        <textarea id="fMsg" rows="3" maxlength="300" placeholder="Gửi lời chúc đến cô dâu chú rể…" aria-label="Lời chúc"></textarea>
+        <button class="btn" type="submit">Gửi xác nhận</button>
+      </form>
+      <p id="thanks" class="thanks" hidden></p>
+    </div>
   </section>
 
   <!-- LƯU BÚT -->
-  <section class="sec">
-    <h2 class="title rv">Sổ lưu bút</h2>
+  <section class="red-sec" id="wishes-sec">
+    <h2 class="gtitle rv">Sổ lưu bút</h2>
     <div id="wishes" class="wishes"></div>
   </section>
 
-  <!-- MỪNG CƯỚI -->
-  <section class="sec tint">
-    <h2 class="title rv">Hộp quà mừng</h2>
+  <!-- HỘP QUÀ -->
+  <section class="red-sec">
+    <h2 class="gtitle rv">Hộp quà mừng</h2>
     <div class="giftbox rv" id="giftbox" role="button" tabindex="0" aria-label="Nhấn để mở hộp quà mừng">
       <div class="gb-lid"><i></i></div>
       <div class="gb-body"><span>囍</span></div>
@@ -243,13 +256,12 @@
     </div>
   </section>
 
-  <a class="fab-wish" href="#wishes" aria-label="Gửi lời chúc">💬</a>
+  <a class="fab-wish" href="#wishes-sec" aria-label="Gửi lời chúc">💬</a>
   <footer class="foot">
     <p class="xi-foot">囍</p>
-    <p class="script big">Xin cảm ơn!</p>
-    <p>Quang Trọng &amp; Thu Trang · 28 &amp; 29.11.2026</p>
+    <p class="thanks-line">Sự hiện diện của quý khách là niềm vinh hạnh của gia đình chúng tôi!</p>
     <button class="btn ghost light sm" id="btnShare">Chia sẻ thiệp</button>
-    <p class="release">Bản cập nhật <!--rel-->v10 · 11/11/2026 22:10<!--/rel--></p>
+    <p class="release">Bản cập nhật <!--rel-->v11 · 11/11/2026 22:17<!--/rel--></p>
   </footer>
 </main>
 
