@@ -137,7 +137,7 @@
   }
   renderWishes();
   /* Dán link Web App của Google Apps Script vào đây để lưu chung (xem google-apps-script/Code.gs) */
-  var SHEET_URL = "";
+  var SHEET_URL = "https://script.google.com/macros/s/AKfycbwMESugtYokov2LOsYFSEr_aV3G4B99Ynw_vguUX78uIUpYBUN5AHSv-U3wS4OkYbIa/exec";
   if (SHEET_URL) {
     fetch(SHEET_URL).then(function (r) { return r.json(); }).then(function (list) {
       if (Array.isArray(list)) { wishes = list; renderWishes(); }
