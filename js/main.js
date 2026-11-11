@@ -11,6 +11,21 @@
     });
   };
 
+  /* Cánh hoa rơi */
+  function petals(n) {
+    var box = $("#petals");
+    for (var i = 0; i < n; i++) {
+      var el = document.createElement("i");
+      el.className = "petal";
+      var s = 8 + Math.random() * 10;
+      el.style.cssText = "left:" + Math.random() * 100 + "vw;width:" + s + "px;height:" + s +
+        "px;animation-duration:" + (8 + Math.random() * 9) + "s;animation-delay:-" + Math.random() * 12 +
+        "s;--dx:" + (Math.random() * 160 - 80) + "px";
+      box.appendChild(el);
+    }
+  }
+  petals(22);
+
   /* Mở phong bì */
   var cover = $("#cover"), bgm = $("#bgm"), musicBtn = $("#musicBtn");
   $("#btnOpen").addEventListener("click", function () {
@@ -21,51 +36,59 @@
       document.body.classList.remove("locked");
       window.scrollTo(0, 0);
       observe();
-      petals(40);
     }, 1300);
     var p = bgm.play();
     if (p && p.then) p.then(function () { musicBtn.classList.add("on"); }).catch(function () {});
   });
-
-  /* Nhạc (chỉ hiện nút nếu có file audio/nhac-nen.mp3) */
   bgm.addEventListener("canplay", function () { musicBtn.hidden = false; });
   musicBtn.addEventListener("click", function () {
     if (bgm.paused) { bgm.play(); musicBtn.classList.add("on"); }
     else { bgm.pause(); musicBtn.classList.remove("on"); }
   });
 
-  /* Cánh hoa rơi */
-  function petals(n) {
-    var box = $("#petals");
-    for (var i = 0; i < n; i++) {
-      var el = document.createElement("i");
-      el.className = "petal";
-      var s = 8 + Math.random() * 10;
-      el.style.cssText = "left:" + Math.random() * 100 + "vw;width:" + s + "px;height:" + s +
-        "px;animation-duration:" + (7 + Math.random() * 9) + "s;animation-delay:" + Math.random() * 8 +
-        "s;--dx:" + (Math.random() * 160 - 80) + "px";
-      box.appendChild(el);
-    }
+  /* Album */
+  var N = 16, gal = $("#gallery"), html = "";
+  for (var i = 1; i <= N; i++) {
+    var f = "img/photos/p" + (i < 10 ? "0" : "") + i + ".jpg";
+    html += '<figure data-i="' + (i - 1) + '"><img loading="lazy" src="' + f + '" alt="Ảnh cưới ' + i + '"></figure>';
   }
-  petals(18);
+  gal.innerHTML = html;
+  var photos = [].map.call(gal.querySelectorAll("img"), function (im) { return im.getAttribute("src"); });
 
-  /* Hiệu ứng cuộn */
+  /* Hiệu ứng khi cuộn */
   function observe() {
-    var els = document.querySelectorAll(".reveal");
+    var els = document.querySelectorAll(".rv,.gallery figure");
     if (!("IntersectionObserver" in window)) { els.forEach(function (e) { e.classList.add("in"); }); return; }
     var io = new IntersectionObserver(function (es) {
-      es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } });
-    }, { threshold: 0.12 });
+      es.forEach(function (e) {
+        if (e.isIntersecting) {
+          var t = e.target, k = t.tagName === "FIGURE" ? (+t.dataset.i % 2) * 120 : 0;
+          setTimeout(function () { t.classList.add("in"); }, k);
+          io.unobserve(t);
+        }
+      });
+    }, { threshold: 0.1 });
     els.forEach(function (e) { io.observe(e); });
   }
 
-  /* Lịch tháng 11/2026 (thứ Hai đứng đầu) */
-  var cal = $("#calendar"), html = "";
-  ["T2", "T3", "T4", "T5", "T6", "T7", "CN"].forEach(function (d) { html += "<b>" + d + "</b>"; });
+  /* Parallax nhẹ cho khung trích dẫn */
+  var qImg = $(".quote-img"), qBox = $(".quote"), ticking = false;
+  window.addEventListener("scroll", function () {
+    if (ticking) return; ticking = true;
+    requestAnimationFrame(function () {
+      var r = qBox.getBoundingClientRect(), h = window.innerHeight;
+      if (r.bottom > 0 && r.top < h) qImg.style.transform = "translateY(" + ((r.top + r.height / 2 - h / 2) * -0.12) + "px)";
+      ticking = false;
+    });
+  }, { passive: true });
+
+  /* Lịch tháng 11/2026 */
+  var cal = $("#calendar"), h = "";
+  ["T2", "T3", "T4", "T5", "T6", "T7", "CN"].forEach(function (d) { h += "<b>" + d + "</b>"; });
   var first = (new Date(2026, 10, 1).getDay() + 6) % 7;
-  for (var i = 0; i < first; i++) html += "<span></span>";
-  for (var d = 1; d <= 30; d++) html += "<span" + (d === 28 || d === 29 ? ' class="hl"' : "") + ">" + d + "</span>";
-  cal.innerHTML = html;
+  for (var a = 0; a < first; a++) h += "<span></span>";
+  for (var d = 1; d <= 30; d++) h += "<span" + (d === 28 || d === 29 ? ' class="hl"' : "") + ">" + d + "</span>";
+  cal.innerHTML = h;
 
   /* Đếm ngược tới 16:00 28/11/2026 */
   var target = new Date(2026, 10, 28, 16, 0, 0).getTime();
@@ -79,23 +102,37 @@
   }
   tick(); setInterval(tick, 1000);
 
-  /* Lightbox */
-  var lb = $("#lb");
-  document.querySelectorAll(".gallery figure").forEach(function (f) {
-    f.addEventListener("click", function () { $("#lbImg").src = f.dataset.full; lb.hidden = false; });
+  /* Lightbox có chuyển ảnh + vuốt */
+  var lb = $("#lb"), cur = 0, sx = 0;
+  function show(i) { cur = (i + photos.length) % photos.length; $("#lbImg").src = photos[cur]; lb.hidden = false; }
+  gal.addEventListener("click", function (e) {
+    var fg = e.target.closest("figure"); if (fg) show(+fg.dataset.i);
   });
-  lb.addEventListener("click", function () { lb.hidden = true; });
+  $("#lbX").onclick = function () { lb.hidden = true; };
+  $("#lbP").onclick = function (e) { e.stopPropagation(); show(cur - 1); };
+  $("#lbN").onclick = function (e) { e.stopPropagation(); show(cur + 1); };
+  lb.addEventListener("click", function (e) { if (e.target === lb) lb.hidden = true; });
+  lb.addEventListener("touchstart", function (e) { sx = e.touches[0].clientX; }, { passive: true });
+  lb.addEventListener("touchend", function (e) {
+    var dx = e.changedTouches[0].clientX - sx; if (Math.abs(dx) > 50) show(cur + (dx < 0 ? 1 : -1));
+  });
+  window.addEventListener("keydown", function (e) {
+    if (lb.hidden) return;
+    if (e.key === "Escape") lb.hidden = true;
+    if (e.key === "ArrowRight") show(cur + 1);
+    if (e.key === "ArrowLeft") show(cur - 1);
+  });
 
-  /* RSVP + sổ lưu bút (lưu trên trình duyệt; xem ghi chú README để nối Google Form) */
+  /* RSVP + lưu bút (lưu trên trình duyệt) */
   var num = $("#fNum");
-  for (var n = 1; n <= 10; n++) num.insertAdjacentHTML("beforeend", "<option>" + n + "</option>");
+  for (var n = 1; n <= 10; n++) num.insertAdjacentHTML("beforeend", "<option value='" + n + "'>" + n + " người</option>");
   var wishes = store.get("wishes") || [
     { n: "Gia đình bác Hùng", m: "Chúc hai cháu trăm năm hạnh phúc, sớm có tin vui!" },
     { n: "Bạn Minh Anh", m: "Chúc cặp đôi luôn yêu thương và đồng hành cùng nhau nhé 💛" }
   ];
   function renderWishes() {
     $("#wishes").innerHTML = wishes.slice().reverse().map(function (w) {
-      return '<div class="wish"><b>' + esc(w.n) + "</b><p>" + esc(w.m) + "</p></div>";
+      return '<div class="wish"><b>' + esc(w.n) + "</b><br>" + esc(w.m) + "</div>";
     }).join("");
   }
   renderWishes();
