@@ -150,6 +150,7 @@ img{display:block;max-width:100%}
 .foot{text-align:center;padding:46px 20px 70px;background:linear-gradient(var(--red2),var(--deep));color:#fff}
 .foot .big{font-size:2.8rem;color:var(--gold2);line-height:1.2}
 .foot p{margin-bottom:14px;font-size:.85rem}
+.foot .release{margin:22px 0 0;font-size:.68rem;opacity:.55;letter-spacing:.04em}
 
 @media(min-width:521px){.hero{border-radius:0}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv,.anim,.gallery figure{opacity:1;transform:none}}
