@@ -136,14 +136,25 @@
     }).join("");
   }
   renderWishes();
+  /* Dán link Web App của Google Apps Script vào đây để lưu chung (xem google-apps-script/Code.gs) */
+  var SHEET_URL = "";
+  if (SHEET_URL) {
+    fetch(SHEET_URL).then(function (r) { return r.json(); }).then(function (list) {
+      if (Array.isArray(list)) { wishes = list; renderWishes(); }
+    }).catch(function () {});
+  }
   $("#rsvpForm").addEventListener("submit", function (e) {
     e.preventDefault();
     var name = $("#fName").value.trim(), msg = $("#fMsg").value.trim(), go = $("#fGo").value;
     if (!name) return;
-    var list = store.get("rsvp") || [];
-    list.push({ name: name, side: $("#fSide").value, go: go, num: $("#fNum").value, msg: msg, t: Date.now() });
-    store.set("rsvp", list);
-    if (msg) { wishes.push({ n: name, m: msg }); store.set("wishes", wishes); renderWishes(); }
+    var rec = { name: name, side: $("#fSide").value, go: go, num: $("#fNum").value, msg: msg };
+    if (SHEET_URL) {
+      fetch(SHEET_URL, { method: "POST", mode: "no-cors", headers: { "Content-Type": "text/plain" }, body: JSON.stringify(rec) }).catch(function () {});
+    } else {
+      var list = store.get("rsvp") || [];
+      rec.t = Date.now(); list.push(rec); store.set("rsvp", list);
+    }
+    if (msg) { wishes.push({ n: name, m: msg }); if (!SHEET_URL) store.set("wishes", wishes); renderWishes(); }
     var th = $("#thanks");
     th.innerHTML = go === "Có"
       ? "Cảm ơn <b>" + esc(name) + "</b>! Rất hân hạnh được đón tiếp " + esc($("#fNum").value) + " khách 💛"
