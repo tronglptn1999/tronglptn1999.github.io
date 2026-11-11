@@ -36,6 +36,7 @@
       document.body.classList.remove("locked");
       window.scrollTo(0, 0);
       observe();
+      petals(30);
     }, 1300);
     var p = bgm.play();
     if (p && p.then) p.then(function () { musicBtn.classList.add("on"); }).catch(function () {});
@@ -71,6 +72,47 @@
     els.forEach(function (e) { io.observe(e); });
   }
 
+  /* Lấp lánh ở ảnh bìa */
+  var heroEl = $(".hero");
+  for (var s = 0; s < 26; s++) {
+    var sp = document.createElement("i");
+    sp.className = "spark";
+    sp.style.cssText = "left:" + Math.random() * 100 + "%;top:" + Math.random() * 78 + "%;--t:" +
+      (2 + Math.random() * 3) + "s;--dl:" + Math.random() * 4 + "s;width:" + (4 + Math.random() * 6) + "px;height:" + (4 + Math.random() * 6) + "px";
+    heroEl.appendChild(sp);
+  }
+
+  /* Chia chữ trích dẫn thành từng từ để hiện lần lượt */
+  var qs = $(".quote-text .script");
+  qs.innerHTML = qs.textContent.split(" ").map(function (w, i) { return '<span class="w" style="--k:' + i + '">' + w + "</span>"; }).join(" ");
+
+  /* Thanh tiến độ + hero mờ dần khi cuộn */
+  var bar = $("#progress"), heroText = $(".hero-text");
+  window.addEventListener("scroll", function () {
+    var y = window.scrollY, max = document.documentElement.scrollHeight - innerHeight;
+    bar.style.transform = "scaleX(" + (max > 0 ? y / max : 0) + ")";
+    if (y < innerHeight) { heroText.style.transform = "translateY(" + y * 0.25 + "px)"; heroText.style.opacity = Math.max(0, 1 - y / (innerHeight * 0.7)); }
+  }, { passive: true });
+
+  /* Nghiêng nhẹ thẻ sự kiện theo con trỏ (máy tính) */
+  document.querySelectorAll(".event").forEach(function (c) {
+    c.addEventListener("mousemove", function (e) {
+      var r = c.getBoundingClientRect(), x = (e.clientX - r.left) / r.width - .5, y = (e.clientY - r.top) / r.height - .5;
+      c.style.transform = "perspective(700px) rotateY(" + x * 6 + "deg) rotateX(" + -y * 6 + "deg) translateY(-3px)";
+    });
+    c.addEventListener("mouseleave", function () { c.style.transform = ""; });
+  });
+
+  /* Trái tim bay lên khi chạm */
+  document.addEventListener("click", function (e) {
+    if (e.target.closest("button,a,input,select,textarea,#lb")) return;
+    var h = document.createElement("i");
+    h.className = "heartfx"; h.textContent = "♥";
+    h.style.cssText = "left:" + (e.clientX - 10) + "px;top:" + (e.clientY - 10) + "px;--hx:" + (Math.random() * 60 - 30) + "px";
+    document.body.appendChild(h);
+    setTimeout(function () { h.remove(); }, 1300);
+  });
+
   /* Parallax nhẹ cho khung trích dẫn */
   var qImg = $(".quote-img"), qBox = $(".quote"), ticking = false;
   window.addEventListener("scroll", function () {
@@ -95,10 +137,15 @@
   var pad = function (n) { return String(n).padStart(2, "0"); };
   function tick() {
     var t = Math.max(0, target - Date.now());
-    $("#cd-d").textContent = Math.floor(t / 864e5);
-    $("#cd-h").textContent = pad(Math.floor(t % 864e5 / 36e5));
-    $("#cd-m").textContent = pad(Math.floor(t % 36e5 / 6e4));
-    $("#cd-s").textContent = pad(Math.floor(t % 6e4 / 1e3));
+    setNum("#cd-d", Math.floor(t / 864e5));
+    setNum("#cd-h", pad(Math.floor(t % 864e5 / 36e5)));
+    setNum("#cd-m", pad(Math.floor(t % 36e5 / 6e4)));
+    setNum("#cd-s", pad(Math.floor(t % 6e4 / 1e3)));
+  }
+  function setNum(sel, v) {
+    var el = $(sel); v = String(v);
+    if (el.textContent === v) return;
+    el.textContent = v; el.classList.remove("flip"); void el.offsetWidth; el.classList.add("flip");
   }
   tick(); setInterval(tick, 1000);
 

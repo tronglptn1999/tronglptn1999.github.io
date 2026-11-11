@@ -152,5 +152,37 @@ img{display:block;max-width:100%}
 .foot p{margin-bottom:14px;font-size:.85rem}
 .foot .release{margin:22px 0 0;font-size:.68rem;opacity:.55;letter-spacing:.04em}
 
+/* ===== hiệu ứng nâng cao ===== */
+#progress{position:fixed;top:0;left:0;height:3px;width:100%;z-index:90;background:linear-gradient(90deg,var(--gold2),var(--red),var(--gold));transform:scaleX(0);transform-origin:left}
+.hero h1.anim{filter:blur(10px);animation-name:upblur}
+@keyframes upblur{to{opacity:1;transform:none;filter:blur(0)}}
+.hero h1{animation-name:upblur,glow2;animation-duration:1.2s,4s;animation-delay:.5s,2s;animation-fill-mode:forwards,none;animation-iteration-count:1,infinite}
+@keyframes glow2{50%{text-shadow:0 2px 28px rgba(243,217,139,.75)}}
+.hero-date,.kicker{background:linear-gradient(90deg,#d9b25a 0,#fff3c4 40%,#d9b25a 80%);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:up 1s var(--d,0s) forwards,shimmer 4s linear 1.5s infinite}
+@keyframes shimmer{to{background-position:-200% 0}}
+.spark{position:absolute;width:6px;height:6px;border-radius:50%;background:radial-gradient(#fff,rgba(243,217,139,0) 70%);opacity:0;animation:twinkle var(--t,3s) var(--dl,0s) infinite;pointer-events:none}
+@keyframes twinkle{0%,100%{opacity:0;transform:scale(.3)}50%{opacity:1;transform:scale(1.6)}}
+.title::after{content:"\2740";width:auto;height:auto;background:none;color:var(--gold);font-size:1rem;margin-top:6px;letter-spacing:.6em;text-indent:.6em}
+.title::before{content:"";display:block;width:90px;height:1px;margin:0 auto 12px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.tint{background:radial-gradient(circle at 12% 18%,rgba(248,215,222,.55) 0 3px,transparent 4px) 0 0/64px 64px,radial-gradient(circle at 70% 60%,rgba(243,217,139,.35) 0 2px,transparent 3px) 0 0/46px 46px,linear-gradient(#fdf1ee,#fff7ee)}
+.person img{animation:ring 3.2s ease-in-out infinite}
+@keyframes ring{50%{box-shadow:0 0 0 5px #fff,0 0 0 10px rgba(184,134,43,.35),0 10px 24px rgba(179,18,46,.28)}}
+.event{transition:transform .35s,box-shadow .35s;will-change:transform}
+.event:hover{box-shadow:0 18px 34px rgba(138,12,34,.16)}
+.btn{position:relative;overflow:hidden}
+.btn::after{content:"";position:absolute;top:0;left:-70%;width:50%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.55),transparent);transform:skewX(-20deg);animation:shine 3.5s infinite}
+.btn.ghost::after{display:none}
+@keyframes shine{0%,60%{left:-70%}100%{left:130%}}
+.countdown b.flip{animation:flip .5s}
+@keyframes flip{from{transform:rotateX(90deg);opacity:0}to{transform:none;opacity:1}}
+.quote-text .script{display:block}
+.quote-text .w{display:inline-block;opacity:0;transform:translateY(14px);filter:blur(6px);transition:all .7s calc(var(--k)*.13s)}
+.quote-text.in .w{opacity:1;transform:none;filter:none}
+.gallery figure img{filter:blur(8px);transform:scale(1.08);transition:filter 1s,transform 1.2s}
+.gallery figure.in img{filter:none;transform:none}
+.gallery figure.in:hover img{transform:scale(1.06)}
+.heartfx{position:fixed;z-index:300;pointer-events:none;color:var(--red);font-size:20px;animation:hfly 1.2s ease-out forwards}
+@keyframes hfly{to{transform:translate(var(--hx),-110px) scale(1.5);opacity:0}}
+.hero-text{will-change:transform,opacity}
 @media(min-width:521px){.hero{border-radius:0}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv,.anim,.gallery figure{opacity:1;transform:none}}
