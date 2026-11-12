@@ -166,7 +166,7 @@ img{display:block;max-width:100%}
 .giftbox p{margin-top:12px;font-size:.78rem;letter-spacing:.14em;color:var(--gold2);animation:blinkp 1.6s infinite}
 @keyframes blinkp{50%{opacity:.35}}
 .giftbox.open{animation:none;pointer-events:none}
-.giftbox.open .gb-lid{transform:rotate(-70deg) translateY(-12px)}
+.giftbox.open .gb-lid{transform:translate(70px,-26px) rotate(24deg);opacity:0;transition:transform .6s ease,opacity .6s ease}
 .giftbox.open p{opacity:0;animation:none}
 .giftbox.open .gb-body span{display:block;font-size:2rem;color:var(--gold2)}
 .gifts{display:grid;grid-template-columns:minmax(0,300px);justify-content:center;gap:12px;margin-top:22px}
