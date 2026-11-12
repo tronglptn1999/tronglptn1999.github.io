@@ -234,7 +234,7 @@
     }).join("") : '<p class="center" style="color:#f3d98b;font-size:.85rem">Hãy là người đầu tiên gửi lời chúc nhé 💛</p>';
   }
   renderWishes();
-  var SHEET_URL = "https://script.google.com/macros/s/AKfycbyOW86VujR1aYGKaRZDSHl5tY3gRKBOuw3pvs8c0Dsa9On1I5r8FAP3ngw8AGkKoDs/exec";
+  var SHEET_URL = "https://script.google.com/macros/s/AKfycbwMESugtYokov2LOsYFSEr_aV3G4B99Ynw_vguUX78uIUpYBUN5AHSv-U3wS4OkYbIa/exec";
   if (SHEET_URL) {
     fetch(SHEET_URL).then(function (r) { return r.json(); }).then(function (list) {
       if (Array.isArray(list)) { wishes = list; renderWishes(); }
