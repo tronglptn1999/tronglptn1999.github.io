@@ -10,121 +10,159 @@
       return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
     });
   };
+  var calm = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  /* Cánh hoa rơi + confetti */
-  function petals(n) {
-    var box = $("#petals");
-    for (var i = 0; i < n; i++) {
-      var el = document.createElement("i");
-      el.className = "petal";
-      var s = 8 + Math.random() * 10;
-      el.style.cssText = "left:" + Math.random() * 100 + "vw;width:" + s + "px;height:" + s +
-        "px;animation-duration:" + (8 + Math.random() * 9) + "s;animation-delay:-" + Math.random() * 12 +
-        "s;--dx:" + (Math.random() * 160 - 80) + "px";
-      box.appendChild(el);
-    }
-  }
-  petals(20);
+  /* ---------- Giấy màu ---------- */
   function confetti(n) {
-    var cols = ["#c21a2b", "#f3d98b", "#fff", "#e0243f", "#d9b25a", "#f8d7de"];
+    if (calm) return;
+    var cols = ["#ecd29a", "#c8a055", "#fffaf1", "#a01c2c", "#f7e6b4", "#d42a42"];
     for (var i = 0; i < n; i++) {
       var c = document.createElement("i");
       c.className = "cf";
       c.style.cssText = "left:" + Math.random() * 100 + "vw;background:" + cols[i % cols.length] +
-        ";animation-duration:" + (2.5 + Math.random() * 2.5) + "s;animation-delay:" + Math.random() * .8 +
+        ";animation-duration:" + (2.6 + Math.random() * 2.6) + "s;animation-delay:" + Math.random() * .8 +
         "s;--dx:" + (Math.random() * 200 - 100) + "px;--rt:" + (Math.random() * 900 - 450) + "deg";
       document.body.appendChild(c);
       (function (el) { setTimeout(function () { el.remove(); }, 6500); })(c);
     }
   }
 
-  /* Mở phong bì */
-  var cover = $("#cover"), bgm = $("#bgm"), musicBtn = $("#musicBtn");
-  $("#btnOpen").addEventListener("click", function () {
-    cover.classList.add("open");
+  /* ---------- Cổng hỷ ---------- */
+  var gate = $("#gate"), bgm = $("#bgm"), musicBtn = $("#musicBtn");
+  var face = '<div class="face">' + $("#faceTpl").innerHTML + "</div>";
+  gate.querySelectorAll(".leaf").forEach(function (l) { l.innerHTML = face; });
+  /* nhạc vào êm: âm lượng tăng dần (iPhone không cho chỉnh âm lượng nên sẽ phát thẳng) */
+  var fadeT = null;
+  function playSoft(ms) {
+    clearInterval(fadeT);
+    try { bgm.volume = 0; } catch (e) {}
+    var p = bgm.play(), t0 = Date.now();
+    fadeT = setInterval(function () {
+      var k = Math.min(1, (Date.now() - t0) / ms);
+      try { bgm.volume = k * k; } catch (e) {}
+      if (k >= 1) clearInterval(fadeT);
+    }, 80);
+    if (p && p.then) p.then(function () { musicBtn.classList.add("on"); }).catch(function () { clearInterval(fadeT); });
+    else musicBtn.classList.add("on");
+  }
+  /* chỉ mở cửa khi ảnh bìa đã tải xong (chờ tối đa 6 giây) */
+  var heroImg = $("#heroBg img"), heroReady = heroImg.complete && heroImg.naturalWidth > 0, wantOpen = false;
+  function heroDone() { heroReady = true; if (wantOpen) openGate(); }
+  heroImg.addEventListener("load", heroDone);
+  heroImg.addEventListener("error", heroDone);
+  function openGate() {
+    if (gate.classList.contains("open")) return;
+    gate.classList.remove("wait");
+    gate.classList.add("open");
+    document.body.classList.add("opened");
+    window.scrollTo(0, 0);
+    setTimeout(function () { confetti(46); }, 700);
     setTimeout(function () {
-      cover.classList.add("gone");
-      $("#invite").hidden = false;
+      gate.remove();
       document.body.classList.remove("locked");
-      window.scrollTo(0, 0);
       observe();
-      petals(25);
-      confetti(60);
-      startFlow();
-    }, 1300);
-    var p = bgm.play();
-    if (p && p.then) p.then(function () { musicBtn.classList.add("on"); }).catch(function () {});
+    }, 2200);
+  }
+  $("#btnOpen").addEventListener("click", function () {
+    if (wantOpen) return;
+    wantOpen = true;
+    playSoft(3500);
+    if (heroReady) { openGate(); return; }
+    gate.classList.add("wait");
+    gate.querySelectorAll(".g-hint").forEach(function (el) { el.textContent = "Đang mở thiệp…"; });
+    setTimeout(openGate, 6000);
   });
   bgm.addEventListener("canplay", function () { musicBtn.hidden = false; });
   musicBtn.addEventListener("click", function () {
-    if (bgm.paused) { bgm.play(); musicBtn.classList.add("on"); }
-    else { bgm.pause(); musicBtn.classList.remove("on"); }
+    if (bgm.paused) playSoft(1200);
+    else { clearInterval(fadeT); bgm.pause(); musicBtn.classList.remove("on"); }
   });
 
-  /* Hiệu ứng khi cuộn */
+  /* ---------- Bụi vàng ---------- */
+  (function () {
+    if (calm) return;
+    var cv = $("#dust"), ctx = cv.getContext("2d"), W, H, ps = [], dpr = Math.min(2, window.devicePixelRatio || 1);
+    function size() { W = innerWidth; H = innerHeight; cv.width = W * dpr; cv.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0); }
+    size(); window.addEventListener("resize", size);
+    for (var i = 0; i < 42; i++) ps.push({
+      x: Math.random() * innerWidth, y: Math.random() * innerHeight, r: .5 + Math.random() * 1.7,
+      vy: -(.08 + Math.random() * .26), vx: (Math.random() - .5) * .16, p: Math.random() * 6.28, s: .008 + Math.random() * .02
+    });
+    function loop() {
+      ctx.clearRect(0, 0, W, H);
+      for (var i = 0; i < ps.length; i++) {
+        var p = ps[i];
+        p.x += p.vx; p.y += p.vy; p.p += p.s;
+        if (p.y < -6) { p.y = H + 6; p.x = Math.random() * W; }
+        if (p.x < -6) p.x = W + 6; else if (p.x > W + 6) p.x = -6;
+        var a = .18 + .6 * Math.abs(Math.sin(p.p));
+        ctx.fillStyle = "rgba(240,212,150," + (a * .16) + ")";
+        ctx.beginPath(); ctx.arc(p.x, p.y, p.r * 3.4, 0, 6.28); ctx.fill();
+        ctx.fillStyle = "rgba(250,230,180," + a + ")";
+        ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, 6.28); ctx.fill();
+      }
+      requestAnimationFrame(loop);
+    }
+    loop();
+  })();
+
+  /* ---------- Hiện dần khi cuộn ---------- */
   function observe() {
     var els = document.querySelectorAll(".rv");
     if (!("IntersectionObserver" in window)) { els.forEach(function (e) { e.classList.add("in"); }); return; }
     var io = new IntersectionObserver(function (es) {
       es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } });
-    }, { threshold: 0.08 });
+    }, { threshold: 0.12, rootMargin: "0px 0px -6% 0px" });
     els.forEach(function (e) { io.observe(e); });
   }
 
-  /* Lấp lánh trên ảnh bìa */
-  var tp = $(".tp-in");
-  for (var s = 0; s < 22; s++) {
-    var sp = document.createElement("i");
-    sp.className = "spark";
-    var z = 4 + Math.random() * 7;
-    sp.style.cssText = "left:" + Math.random() * 100 + "%;top:" + Math.random() * 80 + "%;--t:" + (2 + Math.random() * 3) + "s;--dl:" + Math.random() * 4 + "s;width:" + z + "px;height:" + z + "px";
-    tp.appendChild(sp);
+  /* ---------- Cuộn: thanh tiến độ, ảnh bìa trôi, nút lời chúc ---------- */
+  var bar = $("#progress"), heroBg = $("#heroBg"), fab = $(".fab"), rsvp = $("#rsvp"), ticking = false;
+  function onScroll() {
+    ticking = false;
+    var y = window.scrollY, vh = innerHeight, max = document.documentElement.scrollHeight - vh;
+    bar.style.transform = "scaleX(" + (max > 0 ? y / max : 0) + ")";
+    if (y < vh * 1.2 && !calm) heroBg.style.transform = "translate3d(0," + (y * .28) + "px,0)";
+    var r = rsvp.getBoundingClientRect();
+    fab.classList.toggle("show", y > vh * .8 && (r.top > vh || r.bottom < 0));
   }
+  window.addEventListener("scroll", function () { if (!ticking) { ticking = true; requestAnimationFrame(onScroll); } }, { passive: true });
 
-  /* Album băng chuyền 3D */
-  var N = 16, stage = $("#flowStage"), items = [], cur = 0, timer = null, photos = [];
-  for (var i = 1; i <= N; i++) {
-    var src = "img/photos/p" + (i < 10 ? "0" : "") + i + ".jpg";
-    photos.push(src);
-    var d = document.createElement("div");
-    d.className = "fl-item"; d.dataset.i = i - 1;
-    d.innerHTML = '<img loading="lazy" src="' + src + '" alt="Ảnh cưới ' + i + '">';
-    stage.appendChild(d); items.push(d);
-  }
-  function layout() {
-    items.forEach(function (el, i) {
-      var d = i - cur;
-      if (d > N / 2) d -= N; if (d < -N / 2) d += N;
-      var a = Math.abs(d);
-      if (a > 2) { el.style.opacity = 0; el.style.pointerEvents = "none"; el.style.transform = "translateX(" + d * 60 + "%) scale(.5)"; return; }
-      el.style.opacity = a === 0 ? 1 : (a === 1 ? .85 : .5);
-      el.style.pointerEvents = "auto";
-      el.style.zIndex = 10 - a;
-      el.style.filter = a === 0 ? "none" : "brightness(" + (1 - a * .22) + ")";
-      el.style.transform = "translateX(" + d * 62 + "%) translateZ(" + (-a * 90) + "px) rotateY(" + (-d * 42) + "deg) scale(" + (1 - a * .08) + ")";
+  /* ---------- Album: dải ảnh tự trôi, vuốt được ---------- */
+  var N = 16, photos = [];
+  for (var i = 1; i <= N; i++) photos.push("img/photos/p" + (i < 10 ? "0" : "") + i + ".jpg");
+  document.querySelectorAll(".reel").forEach(function (reel) {
+    var list = reel.dataset.list.split(","), html = "";
+    list.forEach(function (n) {
+      html += '<a class="ph" data-i="' + (n - 1) + '"><img loading="lazy" src="' + photos[n - 1] + '" alt="Ảnh cưới ' + n + '"></a>';
     });
-    $("#flCount").textContent = (cur + 1) + " / " + N;
-  }
-  function go(n) { cur = (n + N) % N; layout(); }
-  function startFlow() { clearInterval(timer); timer = setInterval(function () { go(cur + 1); }, 3500); }
-  function pauseFlow() { clearInterval(timer); setTimeout(startFlow, 6000); }
-  layout();
-  $("#flP").onclick = function () { go(cur - 1); pauseFlow(); };
-  $("#flN").onclick = function () { go(cur + 1); pauseFlow(); };
-  var fx = 0, flow = $("#flow");
-  flow.addEventListener("touchstart", function (e) { fx = e.touches[0].clientX; }, { passive: true });
-  flow.addEventListener("touchend", function (e) {
-    var dx = e.changedTouches[0].clientX - fx; if (Math.abs(dx) > 40) { go(cur + (dx < 0 ? 1 : -1)); pauseFlow(); }
-  });
-  stage.addEventListener("click", function (e) {
-    var it = e.target.closest(".fl-item"); if (!it) return;
-    var i = +it.dataset.i;
-    if (i === cur) show(i); else { go(i); pauseFlow(); }
+    reel.innerHTML = html + html;
+    var dir = +reel.dataset.dir, pos = 0, hold = 0, vis = false, last = 0, started = false;
+    function half() { return reel.scrollWidth / 2; }
+    function step(t) {
+      var dt = Math.min(50, t - (last || t)); last = t;
+      if (vis && !calm && t > hold) {
+        var h = half();
+        if (!started) { pos = dir < 0 ? h : 0; started = true; }
+        pos += dir * dt * .028;
+        if (pos >= h) pos -= h; else if (pos <= 0) pos += h;
+        reel.scrollLeft = pos;
+      } else if (started) pos = reel.scrollLeft;
+      requestAnimationFrame(step);
+    }
+    function pause() { hold = performance.now() + 3500; }
+    ["touchstart", "touchmove", "pointerdown", "wheel"].forEach(function (ev) { reel.addEventListener(ev, pause, { passive: true }); });
+    if ("IntersectionObserver" in window) new IntersectionObserver(function (es) { vis = es[0].isIntersecting; }).observe(reel);
+    else vis = true;
+    requestAnimationFrame(step);
   });
 
-  /* Lightbox */
+  /* ---------- Xem ảnh lớn ---------- */
   var lb = $("#lb"), lcur = 0, sx = 0;
-  function show(i) { lcur = (i + N) % N; $("#lbImg").src = photos[lcur]; lb.hidden = false; }
+  function show(i) { lcur = (i + N) % N; $("#lbImg").src = photos[lcur]; $("#lbC").textContent = (lcur + 1) + " / " + N; lb.hidden = false; }
+  $("#album").addEventListener("click", function (e) {
+    var a = e.target.closest(".ph"); if (a) show(+a.dataset.i);
+  });
   $("#lbX").onclick = function () { lb.hidden = true; };
   $("#lbP").onclick = function (e) { e.stopPropagation(); show(lcur - 1); };
   $("#lbN").onclick = function (e) { e.stopPropagation(); show(lcur + 1); };
@@ -140,22 +178,20 @@
     if (e.key === "ArrowLeft") show(lcur - 1);
   });
 
-  /* Thanh tiến độ */
-  var bar = $("#progress");
-  window.addEventListener("scroll", function () {
-    var y = window.scrollY, max = document.documentElement.scrollHeight - innerHeight;
-    bar.style.transform = "scaleX(" + (max > 0 ? y / max : 0) + ")";
-  }, { passive: true });
-
-  /* Lịch tháng 11/2026 */
+  /* ---------- Lịch tháng 11/2026 ---------- */
   var cal = $("#calendar"), h = "";
   ["T2", "T3", "T4", "T5", "T6", "T7", "CN"].forEach(function (d) { h += "<b>" + d + "</b>"; });
   var first = (new Date(2026, 10, 1).getDay() + 6) % 7;
   for (var a = 0; a < first; a++) h += "<span></span>";
-  for (var d = 1; d <= 30; d++) h += "<span" + (d === 28 || d === 29 ? ' class="hl"' : "") + ">" + d + "</span>";
+  var now = new Date(), today = (now.getFullYear() === 2026 && now.getMonth() === 10) ? now.getDate() : 0;
+  for (var d = 1; d <= 30; d++) {
+    var cls = d === 28 ? "hl" : d === 29 ? "hl heart" : d === today ? "today" : "";
+    h += "<span" + (cls ? ' class="' + cls + '"' : "") + (d === today ? ' aria-label="Hôm nay, ngày ' + d + '"' : "") + ">" + d + "</span>";
+  }
   cal.innerHTML = h;
+  if (today && today < 28) $("#calNote").hidden = false;
 
-  /* Đếm ngược tới 16:00 28/11/2026 */
+  /* ---------- Đếm ngược tới 16:00 28/11/2026 ---------- */
   var target = new Date(2026, 10, 28, 16, 0, 0).getTime();
   var pad = function (n) { return String(n).padStart(2, "0"); };
   function setNum(sel, v) {
@@ -172,7 +208,7 @@
   }
   tick(); setInterval(tick, 1000);
 
-  /* Thêm vào lịch (.ics) */
+  /* ---------- Thêm vào lịch (.ics) ---------- */
   $("#btnIcs").addEventListener("click", function () {
     var ev = [
       ["20261128T160000", "20261128T190000", "Bữa cơm thân mật - Nhà gái (Quang Trọng & Thu Trang)", "Tư gia nhà gái, Xóm Kha Sơn, Xã Kha Sơn, Thái Nguyên"],
@@ -192,18 +228,20 @@
     document.body.appendChild(a); a.click(); a.remove();
   });
 
-  /* Hộp quà */
-  var gb = $("#giftbox");
-  function openGift() {
-    if (gb.classList.contains("open")) return;
-    gb.classList.add("open");
-    confetti(70);
-    setTimeout(function () { var g = $("#gifts"); g.hidden = false; g.querySelectorAll(".rv").forEach(function (e) { e.classList.add("in"); }); }, 650);
-  }
-  gb.addEventListener("click", openGift);
-  gb.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openGift(); } });
+  /* ---------- Hộp mừng cưới ---------- */
+  $("#giftBtn").addEventListener("click", function () {
+    this.hidden = true; this.style.display = "none";
+    $("#giftCard").hidden = false;
+    confetti(60);
+  });
+  $("#btnCopy").addEventListener("click", function () {
+    var b = this, no = $("#accNo").textContent.replace(/\s/g, "");
+    function ok() { b.textContent = "Đã sao chép ✓"; setTimeout(function () { b.textContent = "Sao chép số tài khoản"; }, 2500); }
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(no).then(ok).catch(function () { b.textContent = no; });
+    else b.textContent = no;
+  });
 
-  /* Cặp đôi hoạt hình */
+  /* ---------- Cặp đôi hoạt hình ---------- */
   var toon = $("#toon");
   toon.addEventListener("click", function (e) {
     toon.classList.remove("jump"); void toon.getBoundingClientRect(); toon.classList.add("jump");
@@ -215,23 +253,15 @@
       (function (n) { setTimeout(function () { n.remove(); }, 1500); })(hh);
     }
   });
-  document.addEventListener("click", function (e) {
-    if (e.target.closest("button,a,input,select,textarea,#lb,#toon,.fl-item")) return;
-    var hh = document.createElement("i");
-    hh.className = "heartfx"; hh.textContent = "♥";
-    hh.style.cssText = "left:" + (e.clientX - 10) + "px;top:" + (e.clientY - 10) + "px;--hx:" + (Math.random() * 60 - 30) + "px";
-    document.body.appendChild(hh);
-    setTimeout(function () { hh.remove(); }, 1300);
-  });
 
-  /* RSVP + lưu bút (Google Sheet) */
+  /* ---------- RSVP + lưu bút (Google Sheet) ---------- */
   var num = $("#fNum");
   for (var n = 1; n <= 10; n++) num.insertAdjacentHTML("beforeend", "<option value='" + n + "'>" + n + " người</option>");
   var wishes = store.get("wishes") || [];
   function renderWishes() {
     $("#wishes").innerHTML = wishes.length ? wishes.slice().reverse().map(function (w) {
-      return '<div class="wish"><b>' + esc(w.n) + "</b><br>" + esc(w.m) + "</div>";
-    }).join("") : '<p class="center" style="color:#f3d98b;font-size:.85rem">Hãy là người đầu tiên gửi lời chúc nhé 💛</p>';
+      return '<div class="wish"><b>' + esc(w.n) + "</b><p>" + esc(w.m) + "</p></div>";
+    }).join("") : '<p class="wish-empty">Hãy là người đầu tiên gửi lời chúc nhé</p>';
   }
   renderWishes();
   var SHEET_URL = "https://script.google.com/macros/s/AKfycbwMESugtYokov2LOsYFSEr_aV3G4B99Ynw_vguUX78uIUpYBUN5AHSv-U3wS4OkYbIa/exec";
@@ -240,7 +270,7 @@
       if (Array.isArray(list)) { wishes = list; renderWishes(); }
     }).catch(function () {});
   }
-  /* ---- Chống spam ---- */
+  /* chống spam */
   var loadedAt = Date.now();
   var deviceId = (store.get("dev") || (function () { var d = Math.random().toString(36).slice(2) + Date.now().toString(36); store.set("dev", d); return d; })());
   var BAD = /(https?:|www\.|\.com\b|\.net\b|\.vn\b|\.xyz\b|\.ru\b|t\.me|zalo\.me|bit\.ly)/i;
@@ -285,7 +315,7 @@
     confetti(40);
   });
 
-  /* Chia sẻ */
+  /* ---------- Chia sẻ ---------- */
   $("#btnShare").addEventListener("click", function () {
     var data = { title: document.title, url: location.href };
     if (navigator.share) navigator.share(data).catch(function () {});
