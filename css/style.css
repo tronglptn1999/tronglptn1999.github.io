@@ -169,7 +169,8 @@ img{display:block;max-width:100%}
 .giftbox.open .gb-lid{transform:rotate(-70deg) translateY(-12px)}
 .giftbox.open p{opacity:0;animation:none}
 .giftbox.open .gb-body span{display:block;font-size:2rem;color:var(--gold2)}
-.gifts{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:22px}
+.gifts{display:grid;grid-template-columns:minmax(0,300px);justify-content:center;gap:12px;margin-top:22px}
+.qrimg{display:block;width:100%;max-width:260px;margin:0 auto 10px;border-radius:12px}
 .gifts:not([hidden]){animation:rise .8s}
 @keyframes rise{from{opacity:0;transform:translateY(24px)}}
 .gift{background:var(--cream2);color:var(--red2);border-radius:14px;padding:18px 10px;text-align:center}
