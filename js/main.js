@@ -316,9 +316,40 @@
   });
 
   /* ---------- Chia sẻ ---------- */
-  $("#btnShare").addEventListener("click", function () {
-    var data = { title: document.title, url: location.href };
-    if (navigator.share) navigator.share(data).catch(function () {});
-    else if (navigator.clipboard) navigator.clipboard.writeText(location.href).then(function () { alert("Đã sao chép link thiệp!"); });
+  var SHARE_URL = "https://tronglptn1999.github.io/";
+  var SHARE_TEXT = "Trân trọng mời bạn đến dự lễ cưới của Quang Trọng & Thu Trang — 28 & 29/11/2026 tại Kha Sơn, Thái Nguyên 💕";
+  var isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+  var msgT = null;
+  function shareMsg(t) {
+    var m = $("#shareMsg"); m.textContent = t; m.classList.add("on");
+    clearTimeout(msgT); msgT = setTimeout(function () { m.classList.remove("on"); }, 4000);
+  }
+  function copyLink(done) {
+    var txt = SHARE_TEXT + "\n" + SHARE_URL;
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(done).catch(fallback);
+    else fallback();
+    function fallback() {
+      var t = document.createElement("textarea"); t.value = txt; t.style.cssText = "position:fixed;opacity:0";
+      document.body.appendChild(t); t.select();
+      try { document.execCommand("copy"); done(); } catch (e) { shareMsg(SHARE_URL); }
+      t.remove();
+    }
+  }
+  $("#shFb").href = "https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(SHARE_URL);
+  $("#shFb").addEventListener("click", function (e) {
+    if (isMobile) return;
+    e.preventDefault();
+    window.open(this.href, "fbshare", "width=640,height=560");
+  });
+  /* Zalo không có link chia sẻ công khai: trên điện thoại mở bảng chia sẻ của máy (chọn Zalo), trên máy tính sao chép link */
+  $("#shZalo").addEventListener("click", function () {
+    if (navigator.share && isMobile) {
+      navigator.share({ title: document.title, text: SHARE_TEXT, url: SHARE_URL }).catch(function () {});
+    } else {
+      copyLink(function () { shareMsg("Đã sao chép lời mời và link thiệp — mở Zalo, dán vào cuộc trò chuyện để gửi nhé"); });
+    }
+  });
+  $("#shCopy").addEventListener("click", function () {
+    copyLink(function () { shareMsg("Đã sao chép lời mời và link thiệp ✓"); });
   });
 })();

@@ -20,7 +20,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Great+Vibes&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=ZCOOL+XiaoWei&text=%E5%9B%8D&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=22">
+<link rel="stylesheet" href="css/style.css?v=23">
 </head>
 <body class="locked">
 
@@ -330,8 +330,14 @@
     <p class="foot-thanks rv">Trân trọng cảm ơn!</p>
     <p class="foot-line rv">Sự hiện diện của quý khách<br>là niềm vinh hạnh của gia đình chúng tôi</p>
     <p class="foot-names rv">Quang Trọng <i>&amp;</i> Thu Trang</p>
-    <p class="rv"><button class="btn line" id="btnShare" type="button">Chia sẻ thiệp</button></p>
-    <p class="release">Bản cập nhật <!--rel-->v22 · 13/11/2026 09:27<!--/rel--></p>
+    <p class="share-k rv">Chia sẻ thiệp đến người thân</p>
+    <div class="share rv">
+      <a class="sh fb" id="shFb" href="#" target="_blank" rel="noopener" aria-label="Chia sẻ lên Facebook"><svg viewBox="0 0 24 24"><path d="M13.5 21v-7.6h2.6l.4-3h-3V8.5c0-.9.3-1.5 1.5-1.5h1.6V4.3c-.3 0-1.2-.1-2.3-.1-2.3 0-3.9 1.4-3.9 4v2.2H7.8v3h2.6V21z" fill="currentColor"/></svg><span>Facebook</span></a>
+      <button class="sh za" id="shZalo" type="button" aria-label="Chia sẻ qua Zalo"><b>Zalo</b><span>Zalo</span></button>
+      <button class="sh cp" id="shCopy" type="button" aria-label="Sao chép link thiệp"><svg viewBox="0 0 24 24"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>Sao chép</span></button>
+    </div>
+    <p class="share-msg" id="shareMsg" role="status"></p>
+    <p class="release">Bản cập nhật <!--rel-->v23 · 13/11/2026 09:30<!--/rel--></p>
   </footer>
 </main>
 
@@ -345,6 +351,6 @@
   <span id="lbC" class="lb-c"></span>
 </div>
 
-<script src="js/main.js?v=20"></script>
+<script src="js/main.js?v=23"></script>
 </body>
 </html>
