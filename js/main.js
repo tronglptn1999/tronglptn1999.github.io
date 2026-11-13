@@ -349,6 +349,22 @@
       copyLink(function () { shareMsg("Đã sao chép lời mời và link thiệp — mở Zalo, dán vào cuộc trò chuyện để gửi nhé"); });
     }
   });
+  /* Messenger: điện thoại mở thẳng app Messenger; máy tính sao chép link rồi mở messenger.com */
+  $("#shMs").href = isMobile ? "fb-messenger://share/?link=" + encodeURIComponent(SHARE_URL) : "https://www.messenger.com/";
+  $("#shMs").addEventListener("click", function (e) {
+    if (isMobile) return;
+    e.preventDefault();
+    copyLink(function () { shareMsg("Đã sao chép lời mời và link thiệp — dán vào tin nhắn Messenger để gửi nhé"); });
+    window.open("https://www.messenger.com/", "_blank", "noopener");
+  });
+  /* TikTok không nhận chia sẻ link từ trang web: điện thoại mở bảng chia sẻ (chọn TikTok), máy tính sao chép link */
+  $("#shTt").addEventListener("click", function () {
+    if (navigator.share && isMobile) {
+      navigator.share({ title: document.title, text: SHARE_TEXT, url: SHARE_URL }).catch(function () {});
+    } else {
+      copyLink(function () { shareMsg("Đã sao chép lời mời và link thiệp — mở TikTok, dán vào tin nhắn hoặc phần mô tả nhé"); });
+    }
+  });
   $("#shCopy").addEventListener("click", function () {
     copyLink(function () { shareMsg("Đã sao chép lời mời và link thiệp ✓"); });
   });

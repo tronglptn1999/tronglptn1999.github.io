@@ -275,15 +275,17 @@ body.opened .a{animation:up 1.2s cubic-bezier(.2,.7,.2,1) var(--d,0s) forwards}
 .foot-names{font:500 .9rem var(--serif);white-space:nowrap;letter-spacing:.22em;text-transform:uppercase;color:var(--gold2);margin:26px 0 24px}
 .foot-names i{font-style:normal;opacity:.7}
 .share-k{font-size:.62rem;letter-spacing:.26em;text-indent:.26em;text-transform:uppercase;color:var(--gold2);opacity:.85;margin-bottom:14px}
-.share{display:flex;justify-content:center;gap:16px}
-.sh{display:flex;flex-direction:column;align-items:center;gap:7px;width:64px;color:#fff;font-size:.62rem;letter-spacing:.04em;cursor:pointer}
-.sh svg,.sh b{width:50px;height:50px;border-radius:50%;display:grid;place-items:center;padding:12px;transition:transform .2s;box-shadow:0 8px 18px rgba(0,0,0,.35),0 0 0 1px rgba(236,210,154,.55)}
+.share{display:flex;flex-wrap:wrap;justify-content:center;gap:14px 6px;max-width:340px;margin:0 auto}
+.sh{display:flex;flex-direction:column;align-items:center;gap:7px;width:57px;color:#fff;font-size:.62rem;letter-spacing:.04em;cursor:pointer}
+.sh svg,.sh b{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;padding:12px;transition:transform .2s;box-shadow:0 8px 18px rgba(0,0,0,.35),0 0 0 1px rgba(236,210,154,.55)}
 .sh:active svg,.sh:active b{transform:scale(.9)}
 .sh.fb svg{background:#1877f2}
 .sh.ms svg{background:linear-gradient(135deg,#0a7cff,#a033ff 60%,#ff5c87)}
 .sh.za b{padding:0;font:800 .78rem/1 var(--sans);letter-spacing:0;background:#0068ff;color:#fff}
+.sh.ms svg{background:linear-gradient(135deg,#0a7cff,#a033ff 60%,#ff5c87)}
+.sh.tt svg{background:#111;color:#fff;filter:drop-shadow(-1.5px -1px 0 #25f4ee) drop-shadow(1.5px 1px 0 #fe2c55)}
 .sh.cp svg{background:rgba(255,250,241,.12);color:var(--gold2)}
-.sh span{opacity:.85}
+.sh span{opacity:.85;font-size:.58rem;white-space:nowrap}
 .share-msg{min-height:1.4em;margin-top:14px;font-size:.78rem;color:var(--gold2);opacity:0;transition:opacity .3s}
 .share-msg.on{opacity:1}
 .release{margin-top:30px;font-size:.64rem;letter-spacing:.06em;opacity:.5}
