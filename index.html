@@ -20,7 +20,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Great+Vibes&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=ZCOOL+XiaoWei&text=%E5%9B%8D&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=24">
+<link rel="stylesheet" href="css/style.css?v=25">
 </head>
 <body class="locked">
 
@@ -316,10 +316,17 @@
     <button class="lixi rv zoom" id="giftBtn" type="button" aria-label="Mở hộp mừng cưới">
       <span class="lixi-flap"></span><span class="lixi-seal">囍</span><em>Chạm để mở</em>
     </button>
-    <div class="gift-card" id="giftCard" hidden>
-      <img src="img/qr-chu-re.jpg" alt="Mã QR TPBank - Ngô Quang Trọng">
-      <p><small>Mừng cưới chú rể</small><b>NGÔ QUANG TRỌNG</b>TPBank · <span id="accNo">0433 6696 401</span></p>
-      <button class="btn sm" id="btnCopy" type="button">Sao chép số tài khoản</button>
+    <div class="gifts" id="giftCard" hidden>
+      <div class="gift-card">
+        <img src="img/qr-chu-re.jpg" alt="Mã QR TPBank - Ngô Quang Trọng">
+        <p><small>Mừng cưới chú rể</small><b>NGÔ QUANG TRỌNG</b>TPBank · 0433 6696 401</p>
+        <button class="btn sm copy-acc" data-acc="04336696401" type="button">Sao chép số tài khoản</button>
+      </div>
+      <div class="gift-card">
+        <img src="img/qr-co-dau.jpg" alt="Mã QR MB Bank - Đinh Thu Trang">
+        <p><small>Mừng cưới cô dâu</small><b>ĐINH THU TRANG</b>MB Bank · 0342 730 087</p>
+        <button class="btn sm copy-acc" data-acc="0342730087" type="button">Sao chép số tài khoản</button>
+      </div>
     </div>
   </section>
 
@@ -339,7 +346,7 @@
       <button class="sh cp" id="shCopy" type="button" aria-label="Sao chép link thiệp"><svg viewBox="0 0 24 24"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>Sao chép</span></button>
     </div>
     <p class="share-msg" id="shareMsg" role="status"></p>
-    <p class="release">Bản cập nhật <!--rel-->v24 · 13/11/2026 09:39<!--/rel--></p>
+    <p class="release">Bản cập nhật <!--rel-->v25 · 14/11/2026 21:53<!--/rel--></p>
   </footer>
 </main>
 
@@ -353,6 +360,6 @@
   <span id="lbC" class="lb-c"></span>
 </div>
 
-<script src="js/main.js?v=24"></script>
+<script src="js/main.js?v=25"></script>
 </body>
 </html>

@@ -258,7 +258,9 @@ body.opened .a{animation:up 1.2s cubic-bezier(.2,.7,.2,1) var(--d,0s) forwards}
 .lixi-flap{position:absolute;left:0;right:0;top:0;height:64px;border-radius:12px 12px 0 0;background:linear-gradient(#c62a3a,#a01c2c);clip-path:polygon(0 0,100% 0,100% 55%,50% 100%,0 55%);filter:drop-shadow(0 3px 3px rgba(0,0,0,.3))}
 .lixi-seal{position:absolute;left:50%;top:62px;width:66px;height:66px;margin-left:-33px;border-radius:50%;display:grid;place-items:center;font:400 2.2rem/1 var(--xi);color:var(--wine);background:linear-gradient(135deg,#fbefd2,#d8b46c);box-shadow:0 4px 10px rgba(0,0,0,.35)}
 .lixi em{position:absolute;left:0;right:0;bottom:22px;font-style:normal;font-size:.6rem;letter-spacing:.26em;text-indent:.26em;text-transform:uppercase;font-weight:500;color:var(--gold2);animation:blink 1.8s ease-in-out infinite}
-.gift-card{max-width:290px;margin:28px auto 0;padding:16px 16px 20px;border-radius:18px;background:#fff;border:1px solid var(--gold);box-shadow:0 20px 44px rgba(74,12,22,.22);animation:pop .7s cubic-bezier(.3,1.5,.5,1) both}
+.gifts{display:grid;gap:22px;margin-top:28px}
+.gifts[hidden]{display:none}
+.gift-card{width:100%;max-width:290px;margin:0 auto;padding:16px 16px 20px;border-radius:18px;background:#fff;border:1px solid var(--gold);box-shadow:0 20px 44px rgba(74,12,22,.22);animation:pop .7s cubic-bezier(.3,1.5,.5,1) both}
 @keyframes pop{from{opacity:0;transform:scale(.7) translateY(30px)}}
 .gift-card img{width:100%;border-radius:12px}
 .gift-card p{margin:10px 0 12px;font-size:.84rem;color:#6a5248}

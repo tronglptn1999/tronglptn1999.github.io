@@ -234,11 +234,13 @@
     $("#giftCard").hidden = false;
     confetti(60);
   });
-  $("#btnCopy").addEventListener("click", function () {
-    var b = this, no = $("#accNo").textContent.replace(/\s/g, "");
-    function ok() { b.textContent = "Đã sao chép ✓"; setTimeout(function () { b.textContent = "Sao chép số tài khoản"; }, 2500); }
-    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(no).then(ok).catch(function () { b.textContent = no; });
-    else b.textContent = no;
+  document.querySelectorAll(".copy-acc").forEach(function (b) {
+    b.addEventListener("click", function () {
+      var no = b.dataset.acc;
+      function ok() { b.textContent = "Đã sao chép ✓"; setTimeout(function () { b.textContent = "Sao chép số tài khoản"; }, 2500); }
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(no).then(ok).catch(function () { b.textContent = no; });
+      else b.textContent = no;
+    });
   });
 
   /* ---------- Cặp đôi hoạt hình ---------- */
