@@ -84,18 +84,21 @@
   /* ---------- Bụi vàng ---------- */
   (function () {
     if (calm) return;
-    var cv = $("#dust"), ctx = cv.getContext("2d"), W, H, ps = [], dpr = Math.min(2, window.devicePixelRatio || 1);
+    var cv = $("#dust"), ctx = cv.getContext("2d"), W, H, ps = [], dpr = 1, frame = 0;
     function size() { W = innerWidth; H = innerHeight; cv.width = W * dpr; cv.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0); }
     size(); window.addEventListener("resize", size);
-    for (var i = 0; i < 42; i++) ps.push({
+    for (var i = 0; i < 26; i++) ps.push({
       x: Math.random() * innerWidth, y: Math.random() * innerHeight, r: .5 + Math.random() * 1.7,
       vy: -(.08 + Math.random() * .26), vx: (Math.random() - .5) * .16, p: Math.random() * 6.28, s: .008 + Math.random() * .02
     });
     function loop() {
+      requestAnimationFrame(loop);
+      /* nhẹ máy: vẽ 30 khung/giây, ngừng hẳn khi trang đang tự cuộn */
+      if (window.__autoScrolling || document.hidden || (frame++ & 1)) return;
       ctx.clearRect(0, 0, W, H);
       for (var i = 0; i < ps.length; i++) {
         var p = ps[i];
-        p.x += p.vx; p.y += p.vy; p.p += p.s;
+        p.x += p.vx * 2; p.y += p.vy * 2; p.p += p.s * 2;
         if (p.y < -6) { p.y = H + 6; p.x = Math.random() * W; }
         if (p.x < -6) p.x = W + 6; else if (p.x > W + 6) p.x = -6;
         var a = .18 + .6 * Math.abs(Math.sin(p.p));
@@ -104,7 +107,6 @@
         ctx.fillStyle = "rgba(250,230,180," + a + ")";
         ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, 6.28); ctx.fill();
       }
-      requestAnimationFrame(loop);
     }
     loop();
   })();
@@ -126,8 +128,8 @@
     var y = window.scrollY, vh = innerHeight, max = document.documentElement.scrollHeight - vh;
     bar.style.transform = "scaleX(" + (max > 0 ? y / max : 0) + ")";
     if (y < vh * 1.2 && !calm) heroBg.style.transform = "translate3d(0," + (y * .28) + "px,0)";
-    var r = rsvp.getBoundingClientRect();
-    fab.classList.toggle("show", y > vh * .8 && (r.top > vh || r.bottom < 0));
+    var top = rsvp.offsetTop, inR = y + vh > top && y < top + rsvp.offsetHeight;
+    fab.classList.toggle("show", y > vh * .8 && !inR);
   }
   window.addEventListener("scroll", function () { if (!ticking) { ticking = true; requestAnimationFrame(onScroll); } }, { passive: true });
 
@@ -248,6 +250,8 @@
 
   /* ---------- Cặp đôi hoạt hình ---------- */
   var toon = $("#toon");
+  if ("IntersectionObserver" in window) new IntersectionObserver(function (es) { toon.classList.toggle("vis", es[0].isIntersecting); }).observe(toon);
+  else toon.classList.add("vis");
   toon.addEventListener("click", function (e) {
     toon.classList.remove("jump"); void toon.getBoundingClientRect(); toon.classList.add("jump");
     for (var k = 0; k < 6; k++) {
@@ -374,25 +378,27 @@
     copyLink(function () { shareMsg("Đã sao chép lời mời và link thiệp ✓"); });
   });
   /* ---------- Tự động cuộn trang: chạm/cuộn tay là dừng, bấm nút để chạy tiếp ---------- */
-  var autoBtn = $("#autoBtn"), auto = false, touched = false, aLast = 0, aPos = 0, SPEED = 42, root = document.documentElement;
+  var autoBtn = $("#autoBtn"), auto = false, touched = false, aLast = 0, aAcc = 0, aFrame = 16.7, aY = 0, SPEED = 50, root = document.documentElement;
   function atEnd() { return innerHeight + scrollY >= root.scrollHeight - 2; }
-  /* cuộn theo thời gian thực, giữ vị trí dạng số lẻ để mỗi khung hình nhích đều (không bước 0px/1px) */
+  /* Nhịp đều: đo chu kỳ khung hình (60/90/120Hz) rồi nhích đúng số điểm ảnh nguyên mỗi khung,
+     tránh kiểu 0-1-0-1 lộn xộn gây giật. */
   function autoStep(t) {
     if (!auto) return;
-    var dt = aLast ? Math.min(t - aLast, 50) : 0;
+    if (aLast) { var d = t - aLast; if (d > 4 && d < 40) aFrame += (d - aFrame) * .05; }
     aLast = t;
-    if (Math.abs(scrollY - aPos) > 3) aPos = scrollY;
-    aPos += SPEED * dt / 1000;
-    window.scrollTo(0, aPos);
+    if (Math.abs(scrollY - aY) > 2) aY = scrollY;
+    /* k = số khung hình cho mỗi 1px: 60Hz → 1, 120Hz → 2 (đều ~60px/giây, không lệch nhịp) */
+    var k = Math.max(1, Math.round(1000 / (SPEED * aFrame)));
+    if (++aAcc >= k) { aAcc = 0; aY += 1; window.scrollTo(0, aY); }
     if (atEnd()) { setAuto(false); return; }
     requestAnimationFrame(autoStep);
   }
   function setAuto(on) {
-    auto = on;
+    auto = on; window.__autoScrolling = on;
     autoBtn.classList.toggle("on", on);
     autoBtn.setAttribute("aria-label", on ? "Dừng tự cuộn" : "Tự động cuộn trang");
     root.style.scrollBehavior = on ? "auto" : "";
-    if (on) { aLast = 0; aPos = scrollY; requestAnimationFrame(autoStep); }
+    if (on) { aLast = 0; aAcc = 0; aY = scrollY; requestAnimationFrame(autoStep); }
   }
   autoBtn.addEventListener("click", function () {
     touched = true;
