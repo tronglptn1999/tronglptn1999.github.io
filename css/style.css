@@ -298,6 +298,13 @@ body.opened .a{animation:up 1.2s cubic-bezier(.2,.7,.2,1) var(--d,0s) forwards}
 .music.on i{animation:eq .9s ease-in-out infinite}
 .music.on i:nth-child(2){animation-delay:.25s}.music.on i:nth-child(3){animation-delay:.5s}.music.on i:nth-child(4){animation-delay:.12s}
 @keyframes eq{0%,100%{height:5px}50%{height:19px}}
+.autoscroll{position:fixed;right:16px;bottom:calc(72px + env(safe-area-inset-bottom));z-index:60;width:46px;height:46px;border-radius:50%;background:rgba(74,12,22,.88);border:1px solid var(--gold2);display:flex;align-items:center;justify-content:center;padding:0;cursor:pointer;box-shadow:0 8px 20px rgba(0,0,0,.4);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.autoscroll[hidden]{display:none}
+.autoscroll svg{width:20px;height:20px;fill:none;stroke:var(--gold2);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.autoscroll .i-pause,.autoscroll.on .i-play{display:none}
+.autoscroll.on .i-pause{display:block}
+.autoscroll:not(.on) .i-play{animation:nudge 1.6s ease-in-out infinite}
+@keyframes nudge{50%{transform:translateY(3px)}}
 .fab{position:fixed;left:16px;bottom:calc(16px + env(safe-area-inset-bottom));z-index:60;height:46px;padding:0 18px;border-radius:999px;display:flex;align-items:center;font-size:.64rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--wine);background:linear-gradient(135deg,#fbefd2,#d8b46c);box-shadow:0 8px 20px rgba(0,0,0,.4);opacity:0;transform:translateY(20px);pointer-events:none;transition:opacity .5s,transform .5s}
 .fab.show{opacity:1;transform:none;pointer-events:auto}
 

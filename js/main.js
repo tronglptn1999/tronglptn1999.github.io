@@ -61,6 +61,9 @@
       gate.remove();
       document.body.classList.remove("locked");
       observe();
+      autoBtn.hidden = false;
+      touched = false; /* bỏ qua cú chạm mở thiệp */
+      setTimeout(function () { if (!touched) setAuto(true); }, 1000);
     }, 2200);
   }
   $("#btnOpen").addEventListener("click", function () {
@@ -369,5 +372,35 @@
   });
   $("#shCopy").addEventListener("click", function () {
     copyLink(function () { shareMsg("Đã sao chép lời mời và link thiệp ✓"); });
+  });
+  /* ---------- Tự động cuộn trang: chạm/cuộn tay là dừng, bấm nút để chạy tiếp ---------- */
+  var autoBtn = $("#autoBtn"), auto = false, touched = false, aLast = 0, aAcc = 0, SPEED = 45;
+  function atEnd() { return innerHeight + scrollY >= document.documentElement.scrollHeight - 2; }
+  function autoStep(t) {
+    if (!auto) return;
+    var dt = aLast ? Math.min(t - aLast, 64) : 16;
+    aLast = t; aAcc += SPEED * dt / 1000;
+    var step = Math.floor(aAcc);
+    if (step) { aAcc -= step; window.scrollTo({ top: scrollY + step, behavior: "instant" }); }
+    if (atEnd()) { setAuto(false); return; }
+    requestAnimationFrame(autoStep);
+  }
+  function setAuto(on) {
+    auto = on;
+    autoBtn.classList.toggle("on", on);
+    autoBtn.setAttribute("aria-label", on ? "Dừng tự cuộn" : "Tự động cuộn trang");
+    if (on) { aLast = 0; aAcc = 0; requestAnimationFrame(autoStep); }
+  }
+  autoBtn.addEventListener("click", function () {
+    touched = true;
+    if (!auto && atEnd()) window.scrollTo({ top: 0, behavior: "instant" });
+    setAuto(!auto);
+  });
+  ["wheel", "touchstart", "keydown", "mousedown"].forEach(function (ev) {
+    window.addEventListener(ev, function (e) {
+      if (e.target && e.target.nodeType === 1 && autoBtn.contains(e.target)) return;
+      touched = true;
+      if (auto) setAuto(false);
+    }, { passive: true });
   });
 })();
