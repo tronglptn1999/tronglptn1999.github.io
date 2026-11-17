@@ -374,14 +374,16 @@
     copyLink(function () { shareMsg("Đã sao chép lời mời và link thiệp ✓"); });
   });
   /* ---------- Tự động cuộn trang: chạm/cuộn tay là dừng, bấm nút để chạy tiếp ---------- */
-  var autoBtn = $("#autoBtn"), auto = false, touched = false, aLast = 0, aAcc = 0, SPEED = 45;
-  function atEnd() { return innerHeight + scrollY >= document.documentElement.scrollHeight - 2; }
+  var autoBtn = $("#autoBtn"), auto = false, touched = false, aLast = 0, aPos = 0, SPEED = 42, root = document.documentElement;
+  function atEnd() { return innerHeight + scrollY >= root.scrollHeight - 2; }
+  /* cuộn theo thời gian thực, giữ vị trí dạng số lẻ để mỗi khung hình nhích đều (không bước 0px/1px) */
   function autoStep(t) {
     if (!auto) return;
-    var dt = aLast ? Math.min(t - aLast, 64) : 16;
-    aLast = t; aAcc += SPEED * dt / 1000;
-    var step = Math.floor(aAcc);
-    if (step) { aAcc -= step; window.scrollTo({ top: scrollY + step, behavior: "instant" }); }
+    var dt = aLast ? Math.min(t - aLast, 50) : 0;
+    aLast = t;
+    if (Math.abs(scrollY - aPos) > 3) aPos = scrollY;
+    aPos += SPEED * dt / 1000;
+    window.scrollTo(0, aPos);
     if (atEnd()) { setAuto(false); return; }
     requestAnimationFrame(autoStep);
   }
@@ -389,11 +391,12 @@
     auto = on;
     autoBtn.classList.toggle("on", on);
     autoBtn.setAttribute("aria-label", on ? "Dừng tự cuộn" : "Tự động cuộn trang");
-    if (on) { aLast = 0; aAcc = 0; requestAnimationFrame(autoStep); }
+    root.style.scrollBehavior = on ? "auto" : "";
+    if (on) { aLast = 0; aPos = scrollY; requestAnimationFrame(autoStep); }
   }
   autoBtn.addEventListener("click", function () {
     touched = true;
-    if (!auto && atEnd()) window.scrollTo({ top: 0, behavior: "instant" });
+    if (!auto && atEnd()) { root.style.scrollBehavior = "auto"; window.scrollTo(0, 0); }
     setAuto(!auto);
   });
   ["wheel", "touchstart", "keydown", "mousedown"].forEach(function (ev) {
