@@ -129,7 +129,7 @@
   window.addEventListener("scroll", function () { if (!ticking) { ticking = true; requestAnimationFrame(onScroll); } }, { passive: true });
 
   /* ---------- Album: dải ảnh tự trôi, vuốt được ---------- */
-  var N = 16, photos = [];
+  var N = 18, photos = [];
   for (var i = 1; i <= N; i++) photos.push("img/photos/p" + (i < 10 ? "0" : "") + i + ".jpg");
   document.querySelectorAll(".reel").forEach(function (reel) {
     var list = reel.dataset.list.split(","), html = "";
