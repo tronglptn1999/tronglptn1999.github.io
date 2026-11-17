@@ -20,7 +20,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Great+Vibes&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=ZCOOL+XiaoWei&text=%E5%9B%8D&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=30">
+<link rel="stylesheet" href="css/style.css?v=32">
 </head>
 <body class="locked">
 
@@ -289,23 +289,17 @@
   <!-- RSVP + LƯU BÚT -->
   <section class="sec wine" id="rsvp">
     <svg class="orn rv"><use href="#orn"/></svg>
-    <p class="kicker rv">Rất mong được đón tiếp bạn</p>
-    <h2 class="title foil rv">Xác nhận tham dự</h2>
+    <p class="kicker rv">Gửi lời chúc đến cô dâu chú rể</p>
+    <h2 class="title foil rv">Sổ lưu bút</h2>
     <form id="rsvpForm" class="form rv" autocomplete="off">
-      <input id="fName" required maxlength="60" placeholder="Tên của bạn / gia đình">
+      <input id="fName" required maxlength="60" placeholder="Tên của bạn">
       <input id="fWeb" class="hp" tabindex="-1" autocomplete="off" placeholder="Website">
-      <div class="row">
-        <select id="fSide"><option>Khách nhà trai</option><option>Khách nhà gái</option></select>
-        <select id="fNum"></select>
-      </div>
-      <select id="fGo"><option value="Có">Mình sẽ đến dự</option><option value="Không">Rất tiếc, mình không đến được</option></select>
-      <textarea id="fMsg" rows="3" maxlength="300" placeholder="Gửi lời chúc đến cô dâu chú rể…"></textarea>
-      <button class="btn" type="submit">Gửi xác nhận</button>
+      <textarea id="fMsg" required rows="4" maxlength="300" placeholder="Lời chúc của bạn…"></textarea>
+      <button class="btn" type="submit">Gửi lời chúc</button>
       <p id="thanks" class="thanks" hidden></p>
     </form>
 
-    <h2 class="title foil rv" id="wishes-sec" style="margin-top:56px">Sổ lưu bút</h2>
-    <div class="wishes rv" id="wishes"></div>
+    <div class="wishes rv" id="wishes" style="margin-top:40px"></div>
   </section>
 
   <!-- MỪNG CƯỚI -->
@@ -347,7 +341,7 @@
       <button class="sh cp" id="shCopy" type="button" aria-label="Sao chép link thiệp"><svg viewBox="0 0 24 24"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>Sao chép</span></button>
     </div>
     <p class="share-msg" id="shareMsg" role="status"></p>
-    <p class="release">Bản cập nhật <!--rel-->v30 · 17/11/2026 23:34<!--/rel--></p>
+    <p class="release">Bản cập nhật <!--rel-->v31 · 17/11/2026 23:48<!--/rel--></p>
   </footer>
 </main>
 
@@ -361,6 +355,6 @@
   <span id="lbC" class="lb-c"></span>
 </div>
 
-<script src="js/main.js?v=30"></script>
+<script src="js/main.js?v=32"></script>
 </body>
 </html>

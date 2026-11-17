@@ -1,0 +1,73 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Thiep cuoi Quang Trong & Thu Trang//VI
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Đám cưới Quang Trọng & Thu Trang
+BEGIN:VEVENT
+UID:qt-tt-0@tronglptn1999.github.io
+DTSTAMP:20261117T000000Z
+DTSTART:20261128T090000Z
+DTEND:20261128T120000Z
+SUMMARY:Bữa cơm thân mật - Nhà gái (Quang Trọng & Thu Trang)
+LOCATION:Tư gia nhà gái\, Xóm Kha Sơn\, Xã Kha Sơn\, Thái Nguyên
+DESCRIPTION:Chỉ đường: https://maps.app.goo.gl/1mWAAwxjjZ4f8iiD8\nThi
+ ệp mời: https://tronglptn1999.github.io/
+URL:https://maps.app.goo.gl/1mWAAwxjjZ4f8iiD8
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Bữa cơm thân mật - Nhà gái (Quang Trọng & Thu Trang)
+TRIGGER:-PT3H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:qt-tt-1@tronglptn1999.github.io
+DTSTAMP:20261117T000000Z
+DTSTART:20261128T103000Z
+DTEND:20261128T133000Z
+SUMMARY:Bữa cơm thân mật - Nhà trai (Quang Trọng & Thu Trang)
+LOCATION:Tư gia nhà trai\, Xóm Lương Tạ\, Xã Kha Sơn\, Thái Nguy
+ ên
+DESCRIPTION:Chỉ đường: https://maps.app.goo.gl/Lw4qW4eQi998K4JE6\nThi
+ ệp mời: https://tronglptn1999.github.io/
+URL:https://maps.app.goo.gl/Lw4qW4eQi998K4JE6
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Bữa cơm thân mật - Nhà trai (Quang Trọng & Thu Trang)
+TRIGGER:-PT3H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:qt-tt-2@tronglptn1999.github.io
+DTSTAMP:20261117T000000Z
+DTSTART:20261129T020000Z
+DTEND:20261129T040000Z
+SUMMARY:Lễ Vu Quy - Thu Trang
+LOCATION:Tư gia nhà gái\, Xóm Kha Sơn\, Xã Kha Sơn\, Thái Nguyên
+DESCRIPTION:Chỉ đường: https://maps.app.goo.gl/1mWAAwxjjZ4f8iiD8\nThi
+ ệp mời: https://tronglptn1999.github.io/
+URL:https://maps.app.goo.gl/1mWAAwxjjZ4f8iiD8
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Lễ Vu Quy - Thu Trang
+TRIGGER:-PT3H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:qt-tt-3@tronglptn1999.github.io
+DTSTAMP:20261117T000000Z
+DTSTART:20261129T040000Z
+DTEND:20261129T063000Z
+SUMMARY:Lễ Thành Hôn - Quang Trọng & Thu Trang
+LOCATION:Tư gia nhà trai\, Xóm Lương Tạ\, Xã Kha Sơn\, Thái Nguy
+ ên
+DESCRIPTION:Chỉ đường: https://maps.app.goo.gl/Lw4qW4eQi998K4JE6\nThi
+ ệp mời: https://tronglptn1999.github.io/
+URL:https://maps.app.goo.gl/Lw4qW4eQi998K4JE6
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Lễ Thành Hôn - Quang Trọng & Thu Trang
+TRIGGER:-PT3H
+END:VALARM
+END:VEVENT
+END:VCALENDAR

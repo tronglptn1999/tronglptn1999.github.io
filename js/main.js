@@ -213,24 +213,46 @@
   }
   tick(); setInterval(tick, 1000);
 
-  /* ---------- Thêm vào lịch (.ics) ---------- */
-  $("#btnIcs").addEventListener("click", function () {
-    var ev = [
-      ["20261128T160000", "20261128T190000", "Bữa cơm thân mật - Nhà gái (Quang Trọng & Thu Trang)", "Tư gia nhà gái, Xóm Kha Sơn, Xã Kha Sơn, Thái Nguyên"],
-      ["20261128T173000", "20261128T203000", "Bữa cơm thân mật - Nhà trai (Quang Trọng & Thu Trang)", "Tư gia nhà trai, Xóm Lương Tạ, Xã Kha Sơn, Thái Nguyên"],
-      ["20261129T090000", "20261129T110000", "Lễ Vu Quy - Thu Trang", "Tư gia nhà gái, Xóm Kha Sơn, Xã Kha Sơn, Thái Nguyên"],
-      ["20261129T110000", "20261129T133000", "Lễ Thành Hôn - Quang Trọng", "Tư gia nhà trai, Xóm Lương Tạ, Xã Kha Sơn, Thái Nguyên"]
-    ];
-    var s = "BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//Thiep cuoi//VI\r\n";
-    ev.forEach(function (e, i) {
-      s += "BEGIN:VEVENT\r\nUID:tt-" + i + "@thiep-cuoi\r\nDTSTAMP:20261111T000000Z\r\nDTSTART:" + e[0] + "\r\nDTEND:" + e[1] +
-        "\r\nSUMMARY:" + e[2].replace(/,/g, "\\,") + "\r\nLOCATION:" + e[3].replace(/,/g, "\\,") + "\r\nEND:VEVENT\r\n";
+  /* ---------- Thêm vào lịch: iPhone/iPad → Lịch Apple (.ics), Android & máy tính → Google Calendar ---------- */
+  var CAL = [
+    ["Thứ Bảy 28/11 · 16:00", "Bữa cơm thân mật - Nhà gái", "20261128T090000Z/20261128T120000Z", "Tư gia nhà gái, Xóm Kha Sơn, Xã Kha Sơn, Thái Nguyên", "https://maps.app.goo.gl/1mWAAwxjjZ4f8iiD8"],
+    ["Thứ Bảy 28/11 · 17:30", "Bữa cơm thân mật - Nhà trai", "20261128T103000Z/20261128T133000Z", "Tư gia nhà trai, Xóm Lương Tạ, Xã Kha Sơn, Thái Nguyên", "https://maps.app.goo.gl/Lw4qW4eQi998K4JE6"],
+    ["Chủ Nhật 29/11 · 09:00", "Lễ Vu Quy", "20261129T020000Z/20261129T040000Z", "Tư gia nhà gái, Xóm Kha Sơn, Xã Kha Sơn, Thái Nguyên", "https://maps.app.goo.gl/1mWAAwxjjZ4f8iiD8"],
+    ["Chủ Nhật 29/11 · 11:00", "Lễ Thành Hôn", "20261129T040000Z/20261129T063000Z", "Tư gia nhà trai, Xóm Lương Tạ, Xã Kha Sơn, Thái Nguyên", "https://maps.app.goo.gl/Lw4qW4eQi998K4JE6"]
+  ];
+  var UA = navigator.userAgent;
+  var IOS = /iPad|iPhone|iPod/.test(UA) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+  var ANDROID = /Android/i.test(UA);
+  var ICS_URL = new URL("cal/dam-cuoi.ics", location.href).href;
+  var btnIcs = $("#btnIcs");
+  btnIcs.textContent = IOS ? "+ Thêm vào Lịch iPhone" : ANDROID ? "+ Thêm vào Google Lịch" : "+ Thêm vào lịch";
+  function gcal(e) {
+    return "https://calendar.google.com/calendar/render?action=TEMPLATE" +
+      "&text=" + encodeURIComponent(e[1] + " (Quang Trọng & Thu Trang)") +
+      "&dates=" + e[2] + "&ctz=Asia/Ho_Chi_Minh" +
+      "&location=" + encodeURIComponent(e[3]) +
+      "&details=" + encodeURIComponent("Chỉ đường: " + e[4] + "\nThiệp mời: https://tronglptn1999.github.io/");
+  }
+  function calSheet() {
+    var sh = document.createElement("div");
+    sh.className = "calsheet"; sh.id = "calSheet";
+    sh.innerHTML = '<div class="cal-box" role="dialog" aria-label="Thêm vào lịch">' +
+      '<button class="cal-x" type="button" aria-label="Đóng">×</button>' +
+      "<h3>Thêm vào lịch</h3><p>" + (ANDROID ? "Chạm từng sự kiện để lưu vào Google Lịch" : "Chọn sự kiện để lưu vào Google Calendar") + "</p>" +
+      CAL.map(function (e) {
+        return '<a class="cal-item" target="_blank" rel="noopener" href="' + gcal(e) + '"><small>' + e[0] + "</small><b>" + e[1] + "</b><span>+</span></a>";
+      }).join("") +
+      '<a class="cal-ics" href="' + ICS_URL + '" download="dam-cuoi-quang-trong-thu-trang.ics">' +
+      (ANDROID ? "Dùng lịch khác? Tải file lịch (.ics)" : "Dùng Outlook / Apple Lịch? Tải cả 4 sự kiện (.ics)") + "</a></div>";
+    sh.addEventListener("click", function (e) {
+      if (e.target === sh || e.target.closest(".cal-x")) sh.hidden = true;
     });
-    s += "END:VCALENDAR";
-    var a = document.createElement("a");
-    a.href = URL.createObjectURL(new Blob([s], { type: "text/calendar;charset=utf-8" }));
-    a.download = "dam-cuoi-quang-trong-thu-trang.ics";
-    document.body.appendChild(a); a.click(); a.remove();
+    document.body.appendChild(sh);
+    return sh;
+  }
+  btnIcs.addEventListener("click", function () {
+    if (IOS) { location.href = ICS_URL; return; } /* Safari mở thẳng hộp "Thêm tất cả" của Lịch */
+    ($("#calSheet") || calSheet()).hidden = false;
   });
 
   /* ---------- Hộp mừng cưới ---------- */
@@ -264,12 +286,20 @@
   });
 
   /* ---------- RSVP + lưu bút (Google Sheet) ---------- */
-  var num = $("#fNum");
-  for (var n = 1; n <= 10; n++) num.insertAdjacentHTML("beforeend", "<option value='" + n + "'>" + n + " người</option>");
   var wishes = store.get("wishes") || [];
+  /* thời gian gửi: "14:05 · 17/11/2026" (giờ Việt Nam) */
+  function fmtTime(t) {
+    if (!t) return "";
+    var d = new Date(typeof t === "number" ? t : String(t));
+    if (isNaN(d)) return "";
+    d = new Date(d.getTime() + (d.getTimezoneOffset() + 420) * 6e4);
+    var p2 = function (n) { return (n < 10 ? "0" : "") + n; };
+    return p2(d.getHours()) + ":" + p2(d.getMinutes()) + " · " + p2(d.getDate()) + "/" + p2(d.getMonth() + 1) + "/" + d.getFullYear();
+  }
   function renderWishes() {
     $("#wishes").innerHTML = wishes.length ? wishes.slice().reverse().map(function (w) {
-      return '<div class="wish"><b>' + esc(w.n) + "</b><p>" + esc(w.m) + "</p></div>";
+      var when = fmtTime(w.t);
+      return '<div class="wish"><b>' + esc(w.n) + "</b>" + (when ? '<time>' + when + "</time>" : "") + "<p>" + esc(w.m) + "</p></div>";
     }).join("") : '<p class="wish-empty">Hãy là người đầu tiên gửi lời chúc nhé</p>';
   }
   renderWishes();
@@ -298,8 +328,8 @@
   }
   $("#rsvpForm").addEventListener("submit", function (e) {
     e.preventDefault();
-    var name = $("#fName").value.trim(), msg = $("#fMsg").value.trim(), go2 = $("#fGo").value;
-    if (!name) return;
+    var name = $("#fName").value.trim(), msg = $("#fMsg").value.trim();
+    if (!name || !msg) return;
     if ($("#fWeb").value) { e.target.reset(); return; } /* bẫy bot: ô ẩn bị điền */
     var bad = spamCheck(name, msg);
     if (bad) { warn(bad); return; }
@@ -307,18 +337,16 @@
     sent.push(Date.now()); store.set("sendlog", sent); if (msg) store.set("lastmsg", msg);
     var sb = e.target.querySelector("button[type=submit]"); sb.disabled = true; setTimeout(function () { sb.disabled = false; }, 8000);
     $("#thanks").className = "thanks";
-    var rec = { name: name, side: $("#fSide").value, go: go2, num: $("#fNum").value, msg: msg, dev: deviceId, took: Date.now() - loadedAt };
+    var rec = { name: name, side: "", go: "", num: "", msg: msg, dev: deviceId, took: Date.now() - loadedAt };
     if (SHEET_URL) {
       fetch(SHEET_URL, { method: "POST", mode: "no-cors", headers: { "Content-Type": "text/plain" }, body: JSON.stringify(rec) }).catch(function () {});
     } else {
       var list = store.get("rsvp") || [];
       rec.t = Date.now(); list.push(rec); store.set("rsvp", list);
     }
-    if (msg) { wishes.push({ n: name, m: msg }); if (!SHEET_URL) store.set("wishes", wishes); renderWishes(); }
+    wishes.push({ n: name, m: msg, t: Date.now() }); if (!SHEET_URL) store.set("wishes", wishes); renderWishes();
     var th = $("#thanks");
-    th.innerHTML = go2 === "Có"
-      ? "Cảm ơn <b>" + esc(name) + "</b>! Rất hân hạnh được đón tiếp " + esc($("#fNum").value) + " khách 💛"
-      : "Cảm ơn <b>" + esc(name) + "</b> đã phản hồi. Hẹn gặp bạn dịp khác nhé!";
+    th.innerHTML = "Cảm ơn <b>" + esc(name) + "</b> đã gửi lời chúc 💛";
     th.hidden = false;
     e.target.reset();
     confetti(40);

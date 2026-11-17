@@ -61,7 +61,7 @@ function doGet() {
   var sh = sheet_("LuuBut", ["Thời gian", "Tên", "Lời chúc"]);
   var n = sh.getLastRow() - 1;
   var rows = n > 0 ? sh.getRange(2, 1, n, 3).getValues() : [];
-  var out = rows.slice(-100).map(function (r) { return { n: r[1], m: r[2] }; });
+  var out = rows.slice(-100).map(function (r) { return { n: r[1], m: r[2], t: r[0] instanceof Date ? r[0].getTime() : r[0] }; });
   return ContentService.createTextOutput(JSON.stringify(out))
     .setMimeType(ContentService.MimeType.JSON);
 }
