@@ -1,6 +1,6 @@
 // Dán toàn bộ file này vào Google Sheet: Tiện ích mở rộng > Apps Script
 // Sau khi dán: Triển khai > Quản lý bản triển khai > Sửa (biểu tượng bút) > Phiên bản: "Phiên bản mới" > Triển khai
-// Sheet có các tab: "RSVP", "LuuBut" (lời chúc), "TraLoi" (trả lời lời chúc), "BiChan" (bản ghi bị chặn spam)
+// Sheet có các tab: "RSVP", "LuuBut" (lời chúc), "TraLoi" (trả lời), "ThaTim" (thả tim), "BiChan" (bản ghi bị chặn spam)
 
 function sheet_(name, headers) {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
@@ -17,9 +17,31 @@ function block_(why, d) {
   return ContentService.createTextOutput("blocked");
 }
 
+// Thả tim / bỏ tim: mỗi thiết bị chỉ tính 1 tim cho mỗi lời chúc
+function like_(d) {
+  var id = Number(d.id), dev = String(d.dev || "").slice(0, 40), on = d.on !== false;
+  if (!id || !dev) return ContentService.createTextOutput("bad like");
+  var lock = LockService.getScriptLock();
+  lock.waitLock(10000);
+  try {
+    var cache = CacheService.getScriptCache(), k = "l_" + dev, c = Number(cache.get(k) || 0);
+    if (c >= 120) return ContentService.createTextOutput("slow"); // tối đa 120 lần bấm tim / giờ / thiết bị
+    cache.put(k, String(c + 1), 3600);
+    var sh = sheet_("ThaTim", ["Mã lời chúc", "Thiết bị", "Thời gian"]), n = sh.getLastRow() - 1;
+    var rows = n > 0 ? sh.getRange(2, 1, n, 2).getValues() : [], at = -1;
+    for (var i = 0; i < rows.length; i++) if (Number(rows[i][0]) === id && String(rows[i][1]) === dev) { at = i; break; }
+    if (on && at < 0) sh.appendRow([id, dev, new Date()]);
+    if (!on && at >= 0) sh.deleteRow(at + 2);
+    return ContentService.createTextOutput("ok");
+  } finally {
+    lock.releaseLock();
+  }
+}
+
 function doPost(e) {
   var d;
   try { d = JSON.parse(e.postData.contents); } catch (x) { return ContentService.createTextOutput("bad"); }
+  if (d.type === "like") return like_(d);
   var name = String(d.name || "").trim().slice(0, 60);
   var msg = String(d.msg || "").trim().slice(0, 300);
   var dev = String(d.dev || "").slice(0, 40);
@@ -75,9 +97,14 @@ function doGet() {
     var k = String(Number(r[1]));
     (byId[k] = byId[k] || []).push({ n: r[2], m: r[3], t: ms(r[0]) });
   });
+  // đếm tim theo mã lời chúc
+  var hs = sheet_("ThaTim", ["Mã lời chúc", "Thiết bị", "Thời gian"]), hn = hs.getLastRow() - 1, hearts = {};
+  (hn > 0 ? hs.getRange(2, 1, hn, 1).getValues() : []).forEach(function (r) {
+    var k = String(Number(r[0])); hearts[k] = (hearts[k] || 0) + 1;
+  });
   var out = rows.slice(-100).map(function (r) {
     var t = ms(r[0]);
-    return { n: r[1], m: r[2], t: t, r: byId[String(t)] || [] };
+    return { n: r[1], m: r[2], t: t, r: byId[String(t)] || [], h: hearts[String(t)] || 0 };
   });
   return ContentService.createTextOutput(JSON.stringify(out))
     .setMimeType(ContentService.MimeType.JSON);

@@ -323,6 +323,13 @@
   }
   function moreText(n, open) { return open ? "Thu gọn" : "… Xem thêm " + n + " trả lời"; }
   var PAGE = 5, shown = PAGE, flashId = 0;
+  /* thả tim: mỗi máy 1 tim / lời chúc, bấm lần nữa để bỏ tim */
+  var liked = store.get("liked") || {}, likeT = {};
+  function heartBtn(id, h) {
+    var on = !!liked[id], n = Math.max(Number(h) || 0, on ? 1 : 0);
+    return '<button class="heart-btn' + (on ? " on" : "") + '" type="button" aria-pressed="' + on + '" aria-label="Thả tim">' +
+      '<span class="hi">' + (on ? "♥" : "♡") + '</span><span class="hc">' + (n || "") + "</span></button>";
+  }
   function renderWishes() {
     var box = $("#wishes");
     if (!wishes.length) { box.innerHTML = '<p class="wish-empty">Hãy là người đầu tiên gửi lời chúc nhé</p>'; return; }
@@ -336,7 +343,7 @@
           (more > 0 ? '<button class="rep-more" type="button">' + moreText(more, open) + "</button>" : "") + "</div>" : "";
         return '<div class="wish' + (w.local || (flashId && Number(w.t) === flashId) ? " fresh" : "") + '" data-id="' + id + '">' + avatar(w.n) +
           '<div class="wb"><div class="wh"><b>' + esc(w.n) + "</b>" + timeTag(w.t) + "</div>" +
-          '<p class="wt">' + esc(w.m) + "</p>" + reps + (id ? '<button class="rep-btn" type="button">Trả lời</button>' : "") + "</div></div>";
+          '<p class="wt">' + esc(w.m) + "</p>" + reps + (id ? '<div class="wa">' + heartBtn(id, w.h) + '<button class="rep-btn" type="button">Trả lời</button></div>' : "") + "</div></div>";
       }).join("") +
       (rest > 0 ? '<button class="wb-more" type="button">Xem thêm ' + Math.min(PAGE, rest) + " lời chúc <small>(còn " + rest + ")</small></button>"
         : list.length > PAGE ? '<button class="wb-more less" type="button">Thu gọn danh sách</button>' : "");
@@ -346,6 +353,32 @@
     });
   }
   $("#wishes").addEventListener("click", function (e) {
+    var hb = e.target.closest(".heart-btn");
+    if (hb) {
+      e.stopPropagation();
+      var id = Number(hb.closest(".wish").dataset.id), w = findWish(id); if (!w) return;
+      var on = !liked[id];
+      if (on) liked[id] = 1; else delete liked[id];
+      store.set("liked", liked);
+      w.h = Math.max(0, (Number(w.h) || 0) + (on ? 1 : -1));
+      hb.outerHTML = heartBtn(id, w.h);
+      if (on) {
+        var nb = $('#wishes .wish[data-id="' + id + '"] .heart-btn'), r = nb.getBoundingClientRect();
+        nb.classList.add("pop");
+        for (var k = 0; k < 4; k++) (function (k) {
+          var f = document.createElement("span"); f.className = "heartfx"; f.textContent = "♥";
+          f.style.left = (r.left + 6 + (k - 1.5) * 8) + "px"; f.style.top = (r.top - 4) + "px"; f.style.animationDelay = (k * .08) + "s"; f.style.setProperty("--hx", ((k - 1.5) * 16) + "px"); f.style.fontSize = "15px";
+          document.body.appendChild(f); setTimeout(function () { f.remove(); }, 1500);
+        })(k);
+      }
+      /* gom các lần bấm nhanh liên tiếp, chỉ gửi trạng thái cuối */
+      clearTimeout(likeT[id]);
+      likeT[id] = setTimeout(function () {
+        if (SHEET_URL) fetch(SHEET_URL, { method: "POST", mode: "no-cors", headers: { "Content-Type": "text/plain" },
+          body: JSON.stringify({ type: "like", id: id, on: !!liked[id], dev: deviceId }) }).catch(function () {});
+      }, 700);
+      return;
+    }
     var b = e.target.closest(".wb-more, .wt-more"); if (!b) return;
     e.stopPropagation();
     if (b.classList.contains("wt-more")) {
