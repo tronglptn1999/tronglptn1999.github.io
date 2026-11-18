@@ -452,6 +452,37 @@
     confetti(40);
   });
 
+  /* ---------- Bong bóng lời chúc: từ màn hình thứ 3 trở đi, lần lượt hiện ngẫu nhiên một lời chúc ---------- */
+  var bub = document.createElement("div"), bubQ = [], bubT = 0, bubHide = 0, bubOn = false, rsvpSec = $("#rsvp");
+  bub.className = "wbub"; bub.setAttribute("role", "status"); bub.setAttribute("aria-live", "polite");
+  document.body.appendChild(bub);
+  function nextWish() {
+    if (!bubQ.length) bubQ = wishes.filter(function (w) { return w.m; }).sort(function () { return Math.random() - .5; });
+    return bubQ.pop();
+  }
+  function bubShow() {
+    var w = nextWish(); if (!w) return;
+    bub.innerHTML = avatar(w.n, true) + "<div><b>" + esc(w.n) + "</b><p>" + esc(w.m) + "</p></div>";
+    bub.classList.add("on");
+    clearTimeout(bubHide); bubHide = setTimeout(function () { bub.classList.remove("on"); }, 4800);
+  }
+  function bubLoop() { if (!bubOn) return; bubShow(); bubT = setTimeout(bubLoop, 7500); }
+  function bubCheck() {
+    var y = scrollY, vh = innerHeight, top = rsvpSec.offsetTop;
+    var inR = y + vh > top && y < top + rsvpSec.offsetHeight; /* đang xem sổ lưu bút thì không cần bong bóng */
+    var want = document.body.classList.contains("opened") && !document.getElementById("gate") && y > vh * 2 && !inR && wishes.length > 0;
+    if (want === bubOn) return;
+    bubOn = want; clearTimeout(bubT);
+    if (want) bubT = setTimeout(bubLoop, 900);
+    else { clearTimeout(bubHide); bub.classList.remove("on"); }
+  }
+  var bubTick = false;
+  window.addEventListener("scroll", function () { if (!bubTick) { bubTick = true; requestAnimationFrame(function () { bubTick = false; bubCheck(); }); } }, { passive: true });
+  bub.addEventListener("click", function () {
+    bub.classList.remove("on");
+    $("#wishes").scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+
   /* ---------- Chia sẻ ---------- */
   var SHARE_URL = "https://tronglptn1999.github.io/";
   var SHARE_TEXT = "Trân trọng mời bạn đến dự lễ cưới của Quang Trọng & Thu Trang — 28 & 29/11/2026 tại Kha Sơn, Thái Nguyên 💕";

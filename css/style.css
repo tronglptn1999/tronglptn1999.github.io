@@ -378,3 +378,11 @@ body.opened .a{animation:up 1.2s cubic-bezier(.2,.7,.2,1) var(--d,0s) forwards}
 .wb-more:active{transform:scale(.97)}
 .wt-more{display:block;margin-top:2px}
 .wb .rep-btn{display:inline-block;margin-top:6px}
+/* bong bóng lời chúc */
+.wbub{position:fixed;left:16px;bottom:calc(74px + env(safe-area-inset-bottom));z-index:59;max-width:min(272px,calc(100% - 96px));display:flex;gap:9px;align-items:flex-start;padding:10px 13px 11px;border-radius:18px 18px 18px 4px;background:rgba(74,12,22,.7);border:1px solid rgba(236,210,154,.42);color:#fbefd8;box-shadow:0 10px 26px rgba(0,0,0,.28);opacity:0;transform:translateY(12px) scale(.94);transform-origin:0 100%;transition:opacity .7s ease,transform .7s cubic-bezier(.2,.8,.2,1);pointer-events:none;cursor:pointer;text-align:left}
+.wbub.on{opacity:.9;transform:none;pointer-events:auto}
+.wbub>div{min-width:0}
+.wbub b{display:block;font:600 .88rem var(--serif);color:var(--gold2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wbub p{margin-top:1px;font-size:.74rem;line-height:1.4;opacity:.92;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;line-clamp:2;overflow:hidden;overflow-wrap:anywhere}
+.wbub .av.sm{margin-top:2px}
+@media (prefers-reduced-motion:reduce){.wbub{transition:opacity .4s}}
