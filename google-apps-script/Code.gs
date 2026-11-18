@@ -109,3 +109,62 @@ function doGet() {
   return ContentService.createTextOutput(JSON.stringify(out))
     .setMimeType(ContentService.MimeType.JSON);
 }
+
+// ================= Thông báo Gmail gom theo giờ =================
+// Chạy hàm caiDatThongBao() MỘT LẦN trong trình chỉnh sửa (nút ▷ Chạy) để bật lịch gửi mỗi giờ.
+// Mỗi giờ, nếu có lời chúc / trả lời mới thì gửi 1 email tổng hợp về Gmail của chủ script. Không có gì mới thì không gửi.
+function caiDatThongBao() {
+  ScriptApp.getProjectTriggers().forEach(function (t) {
+    if (t.getHandlerFunction() === "guiThongBaoTheoGio") ScriptApp.deleteTrigger(t);
+  });
+  ScriptApp.newTrigger("guiThongBaoTheoGio").timeBased().everyHours(1).create();
+  PropertiesService.getScriptProperties().setProperty("lastDigest", String(Date.now()));
+  MailApp.sendEmail({
+    to: Session.getEffectiveUser().getEmail(),
+    subject: "💌 Đã bật thông báo lời chúc theo giờ",
+    htmlBody: "Từ giờ, mỗi giờ nếu thiệp cưới có lời chúc hoặc trả lời mới, bạn sẽ nhận 1 email tổng hợp tại đây."
+  });
+}
+
+function guiThongBaoTheoGio() {
+  var props = PropertiesService.getScriptProperties();
+  var since = Number(props.getProperty("lastDigest") || 0), now = Date.now();
+  var ms = function (v) { return v instanceof Date ? v.getTime() : Number(new Date(v)) || 0; };
+  var h = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
+  var fmt = function (t) { return Utilities.formatDate(new Date(t), "Asia/Ho_Chi_Minh", "HH:mm dd/MM"); };
+
+  var ws = sheet_("LuuBut", ["Thời gian", "Tên", "Lời chúc"]), wn = ws.getLastRow() - 1;
+  var wishes = (wn > 0 ? ws.getRange(2, 1, wn, 3).getValues() : []);
+  var nameById = {};
+  wishes.forEach(function (r) { nameById[String(ms(r[0]))] = r[1]; });
+  var newW = wishes.filter(function (r) { var t = ms(r[0]); return t > since && t <= now; });
+
+  var rs = sheet_("TraLoi", ["Thời gian", "Mã lời chúc", "Tên", "Trả lời"]), rn = rs.getLastRow() - 1;
+  var newR = (rn > 0 ? rs.getRange(2, 1, rn, 4).getValues() : []).filter(function (r) { var t = ms(r[0]); return t > since && t <= now; });
+
+  props.setProperty("lastDigest", String(now));
+  if (!newW.length && !newR.length) return;
+
+  var row = "padding:10px 12px;border-left:3px solid #c8a055;background:#fbf6ec;margin:8px 0;border-radius:4px";
+  var html = '<div style="font-family:Arial,sans-serif;color:#4a0c16;max-width:560px">';
+  if (newW.length) {
+    html += "<h3 style=\"margin:16px 0 4px\">💌 " + newW.length + " lời chúc mới</h3>";
+    newW.forEach(function (r) {
+      html += '<div style="' + row + '"><b>' + h(r[1]) + '</b> <span style="color:#999;font-size:12px">' + fmt(ms(r[0])) + "</span><br>" + h(r[2]) + "</div>";
+    });
+  }
+  if (newR.length) {
+    html += "<h3 style=\"margin:16px 0 4px\">↩ " + newR.length + " trả lời mới</h3>";
+    newR.forEach(function (r) {
+      var to = nameById[String(Number(r[1]))];
+      html += '<div style="' + row + '"><b>' + h(r[2]) + "</b>" + (to ? " trả lời <b>" + h(to) + "</b>" : "") +
+        ' <span style="color:#999;font-size:12px">' + fmt(ms(r[0])) + "</span><br>" + h(r[3]) + "</div>";
+    });
+  }
+  html += '<p style="margin-top:18px"><a href="https://tronglptn1999.github.io/#rsvp" style="color:#a01c2c">Mở sổ lưu bút trên thiệp →</a></p></div>';
+
+  var parts = [];
+  if (newW.length) parts.push(newW.length + " lời chúc mới");
+  if (newR.length) parts.push(newR.length + " trả lời mới");
+  MailApp.sendEmail({ to: Session.getEffectiveUser().getEmail(), subject: "💌 Thiệp cưới: " + parts.join(" · "), htmlBody: html });
+}
