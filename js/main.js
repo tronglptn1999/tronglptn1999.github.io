@@ -453,7 +453,7 @@
   });
 
   /* ---------- Bong bóng lời chúc: từ màn hình thứ 2 trở đi, lần lượt hiện ngẫu nhiên một lời chúc ---------- */
-  var bub = document.createElement("div"), bubQ = [], bubT = 0, bubHide = 0, bubOn = false, typing = false;
+  var bub = document.createElement("div"), bubQ = [], bubT = 0, bubHide = 0, bubOn = false, typing = false, bubW = null;
   bub.className = "wbub"; bub.setAttribute("role", "status"); bub.setAttribute("aria-live", "polite");
   document.body.appendChild(bub);
   function nextWish() {
@@ -462,6 +462,7 @@
   }
   function bubShow() {
     var w = nextWish(); if (!w) return;
+    bubW = w;
     bub.innerHTML = avatar(w.n, true) + "<div><b>" + esc(w.n) + "</b><p>" + esc(w.m) + "</p></div>";
     bub.classList.add("on");
     clearTimeout(bubHide); bubHide = setTimeout(function () { bub.classList.remove("on"); }, 4200);
@@ -480,9 +481,19 @@
   window.addEventListener("scroll", function () { if (!bubTick) { bubTick = true; requestAnimationFrame(function () { bubTick = false; bubCheck(); }); } }, { passive: true });
   document.addEventListener("focusin", function (e) { typing = /INPUT|TEXTAREA/.test(e.target.tagName); bubCheck(); });
   document.addEventListener("focusout", function () { typing = false; setTimeout(bubCheck, 50); });
+  /* chạm bong bóng → mở đúng trang danh sách, cuộn tới đúng lời chúc và làm nổi bật nó */
   bub.addEventListener("click", function () {
     bub.classList.remove("on");
-    $("#wishes").scrollIntoView({ behavior: "smooth", block: "start" });
+    var list = wishes.slice().reverse(), i = list.indexOf(bubW);
+    if (i < 0) { $("#wishes").scrollIntoView({ behavior: "smooth", block: "start" }); return; }
+    if (i >= shown) { shown = Math.ceil((i + 1) / PAGE) * PAGE; renderWishes(); }
+    var card = $("#wishes").querySelectorAll(".wish")[i]; if (!card) return;
+    var t = card.querySelector(".wt"), more = card.querySelector(".wt-more");
+    if (t && more && !t.classList.contains("full")) { t.classList.add("full"); more.textContent = "Thu gọn"; }
+    document.querySelectorAll(".wish.hl").forEach(function (el) { el.classList.remove("hl"); });
+    card.scrollIntoView({ behavior: "smooth", block: "center" });
+    void card.offsetWidth; card.classList.add("hl");
+    setTimeout(function () { card.classList.remove("hl"); }, 3200);
   });
 
   /* ---------- Chia sẻ ---------- */
