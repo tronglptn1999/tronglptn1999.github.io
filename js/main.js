@@ -464,16 +464,16 @@
     var w = nextWish(); if (!w) return;
     bub.innerHTML = avatar(w.n, true) + "<div><b>" + esc(w.n) + "</b><p>" + esc(w.m) + "</p></div>";
     bub.classList.add("on");
-    clearTimeout(bubHide); bubHide = setTimeout(function () { bub.classList.remove("on"); }, 4800);
+    clearTimeout(bubHide); bubHide = setTimeout(function () { bub.classList.remove("on"); }, 4200);
   }
-  function bubLoop() { if (!bubOn) return; bubShow(); bubT = setTimeout(bubLoop, 7500); }
+  function bubLoop() { if (!bubOn) return; bubShow(); bubT = setTimeout(bubLoop, 5200); }
   function bubCheck() {
     var y = scrollY, vh = innerHeight, top = rsvpSec.offsetTop;
     var inR = y + vh > top && y < top + rsvpSec.offsetHeight; /* đang xem sổ lưu bút thì không cần bong bóng */
     var want = document.body.classList.contains("opened") && !document.getElementById("gate") && y > vh * 2 && !inR && wishes.length > 0;
     if (want === bubOn) return;
     bubOn = want; clearTimeout(bubT);
-    if (want) bubT = setTimeout(bubLoop, 900);
+    if (want) bubT = setTimeout(bubLoop, 500);
     else { clearTimeout(bubHide); bub.classList.remove("on"); }
   }
   var bubTick = false;
