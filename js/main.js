@@ -452,8 +452,8 @@
     confetti(40);
   });
 
-  /* ---------- Bong bóng lời chúc: từ màn hình thứ 3 trở đi, lần lượt hiện ngẫu nhiên một lời chúc ---------- */
-  var bub = document.createElement("div"), bubQ = [], bubT = 0, bubHide = 0, bubOn = false, rsvpSec = $("#rsvp");
+  /* ---------- Bong bóng lời chúc: từ màn hình thứ 2 trở đi, lần lượt hiện ngẫu nhiên một lời chúc ---------- */
+  var bub = document.createElement("div"), bubQ = [], bubT = 0, bubHide = 0, bubOn = false, typing = false;
   bub.className = "wbub"; bub.setAttribute("role", "status"); bub.setAttribute("aria-live", "polite");
   document.body.appendChild(bub);
   function nextWish() {
@@ -468,9 +468,9 @@
   }
   function bubLoop() { if (!bubOn) return; bubShow(); bubT = setTimeout(bubLoop, 5200); }
   function bubCheck() {
-    var y = scrollY, vh = innerHeight, top = rsvpSec.offsetTop;
-    var inR = y + vh > top && y < top + rsvpSec.offsetHeight; /* đang xem sổ lưu bút thì không cần bong bóng */
-    var want = document.body.classList.contains("opened") && !document.getElementById("gate") && y > vh * 2 && !inR && wishes.length > 0;
+    /* chỉ màn hình đầu tiên không hiện; đang gõ chữ thì tạm ẩn cho khỏi vướng */
+    var y = scrollY, vh = innerHeight;
+    var want = document.body.classList.contains("opened") && !document.getElementById("gate") && y > vh * .85 && !typing && wishes.length > 0;
     if (want === bubOn) return;
     bubOn = want; clearTimeout(bubT);
     if (want) bubT = setTimeout(bubLoop, 500);
@@ -478,6 +478,8 @@
   }
   var bubTick = false;
   window.addEventListener("scroll", function () { if (!bubTick) { bubTick = true; requestAnimationFrame(function () { bubTick = false; bubCheck(); }); } }, { passive: true });
+  document.addEventListener("focusin", function (e) { typing = /INPUT|TEXTAREA/.test(e.target.tagName); bubCheck(); });
+  document.addEventListener("focusout", function () { typing = false; setTimeout(bubCheck, 50); });
   bub.addEventListener("click", function () {
     bub.classList.remove("on");
     $("#wishes").scrollIntoView({ behavior: "smooth", block: "start" });
