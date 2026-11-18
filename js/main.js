@@ -298,20 +298,64 @@
   }
   /* lưu bút + trả lời: hiện 2 trả lời đầu, còn lại ẩn sau "… Xem thêm" */
   var openR = {};
+  /* thời gian tương đối: "vừa xong", "5 phút trước", "hôm qua"… (rê/nhấn giữ để xem giờ chính xác) */
+  function relTime(t) {
+    var d = Number(new Date(typeof t === "number" ? t : String(t || "")));
+    if (!d) return "";
+    var s = (Date.now() - d) / 1000;
+    if (s < 60) return "vừa xong";
+    if (s < 3600) return Math.floor(s / 60) + " phút trước";
+    if (s < 86400) return Math.floor(s / 3600) + " giờ trước";
+    if (s < 172800) return "hôm qua";
+    if (s < 604800) return Math.floor(s / 86400) + " ngày trước";
+    return fmtTime(t).split(" · ")[1];
+  }
+  function timeTag(t) { var r = relTime(t); return r ? '<time title="' + fmtTime(t) + '">' + r + "</time>" : ""; }
+  /* ảnh đại diện chữ cái: lấy chữ đầu của tên gọi (từ cuối), màu theo tên */
+  var AV = ["#a01c2c", "#b0843a", "#6d1220", "#8a5a2b", "#c0606a", "#7a3b52", "#9c6b1f"];
+  function avatar(name, small) {
+    var n = String(name || "?").trim(), parts = n.split(/\s+/), ch = (parts[parts.length - 1] || n).charAt(0).toUpperCase() || "?", h = 0;
+    for (var i = 0; i < n.length; i++) h = (h * 31 + n.charCodeAt(i)) >>> 0;
+    return '<span class="av' + (small ? " sm" : "") + '" style="background:' + AV[h % AV.length] + '" aria-hidden="true">' + esc(ch) + "</span>";
+  }
   function replyHtml(r) {
-    var when = fmtTime(r.t);
-    return '<div class="rep"><b>' + esc(r.n) + "</b>" + (when ? "<time>" + when + "</time>" : "") + "<p>" + esc(r.m) + "</p></div>";
+    return '<div class="rep">' + avatar(r.n, true) + '<div class="rb"><div class="wh"><b>' + esc(r.n) + "</b>" + timeTag(r.t) + "</div><p>" + esc(r.m) + "</p></div></div>";
   }
   function moreText(n, open) { return open ? "Thu gọn" : "… Xem thêm " + n + " trả lời"; }
+  var PAGE = 5, shown = PAGE, flashId = 0;
   function renderWishes() {
-    $("#wishes").innerHTML = wishes.length ? wishes.slice().reverse().map(function (w) {
-      var when = fmtTime(w.t), rs = w.r || [], id = (!w.local && Number(w.t)) || 0, more = rs.length - 2, open = !!openR[id];
-      var reps = rs.length ? '<div class="reps' + (open ? " open" : "") + '">' + rs.map(replyHtml).join("") +
-        (more > 0 ? '<button class="rep-more" type="button">' + moreText(more, open) + "</button>" : "") + "</div>" : "";
-      return '<div class="wish" data-id="' + id + '"><b>' + esc(w.n) + "</b>" + (when ? "<time>" + when + "</time>" : "") +
-        "<p>" + esc(w.m) + "</p>" + reps + (id ? '<button class="rep-btn" type="button">Trả lời</button>' : "") + "</div>";
-    }).join("") : '<p class="wish-empty">Hãy là người đầu tiên gửi lời chúc nhé</p>';
+    var box = $("#wishes");
+    if (!wishes.length) { box.innerHTML = '<p class="wish-empty">Hãy là người đầu tiên gửi lời chúc nhé</p>'; return; }
+    var list = wishes.slice().reverse(), nRep = 0;
+    list.forEach(function (w) { nRep += (w.r || []).length; });
+    var vis = list.slice(0, shown), rest = list.length - vis.length;
+    box.innerHTML = '<div class="wb-head"><span>💌 <b>' + list.length + "</b> lời chúc" + (nRep ? " · <b>" + nRep + "</b> trả lời" : "") + "</span><span class=\"wb-sort\">Mới nhất</span></div>" +
+      vis.map(function (w) {
+        var rs = w.r || [], id = (!w.local && Number(w.t)) || 0, more = rs.length - 2, open = !!openR[id];
+        var reps = rs.length ? '<div class="reps' + (open ? " open" : "") + '">' + rs.map(replyHtml).join("") +
+          (more > 0 ? '<button class="rep-more" type="button">' + moreText(more, open) + "</button>" : "") + "</div>" : "";
+        return '<div class="wish' + (w.local || (flashId && Number(w.t) === flashId) ? " fresh" : "") + '" data-id="' + id + '">' + avatar(w.n) +
+          '<div class="wb"><div class="wh"><b>' + esc(w.n) + "</b>" + timeTag(w.t) + "</div>" +
+          '<p class="wt">' + esc(w.m) + "</p>" + reps + (id ? '<button class="rep-btn" type="button">Trả lời</button>' : "") + "</div></div>";
+      }).join("") +
+      (rest > 0 ? '<button class="wb-more" type="button">Xem thêm ' + Math.min(PAGE, rest) + " lời chúc <small>(còn " + rest + ")</small></button>"
+        : list.length > PAGE ? '<button class="wb-more less" type="button">Thu gọn danh sách</button>' : "");
+    /* lời chúc dài quá 4 dòng: rút gọn, có nút xem thêm */
+    box.querySelectorAll(".wt").forEach(function (p) {
+      if (p.scrollHeight > p.clientHeight + 2) p.insertAdjacentHTML("afterend", '<button class="wt-more" type="button">Xem thêm</button>');
+    });
   }
+  $("#wishes").addEventListener("click", function (e) {
+    var b = e.target.closest(".wb-more, .wt-more"); if (!b) return;
+    e.stopPropagation();
+    if (b.classList.contains("wt-more")) {
+      var open = b.previousElementSibling.classList.toggle("full");
+      b.textContent = open ? "Thu gọn" : "Xem thêm";
+      return;
+    }
+    if (b.classList.contains("less")) { shown = PAGE; renderWishes(); $("#wishes").scrollIntoView({ block: "start" }); return; }
+    shown += PAGE; renderWishes();
+  }, true);
   function findWish(id) { for (var i = 0; i < wishes.length; i++) if (Number(wishes[i].t) === id) return wishes[i]; return null; }
   $("#wishes").addEventListener("click", function (e) {
     var wEl = e.target.closest(".wish"); if (!wEl) return;
@@ -327,7 +371,7 @@
     if (e.target.closest(".rep-btn")) {
       var f = wEl.querySelector(".rep-form");
       if (!f) {
-        wEl.insertAdjacentHTML("beforeend", '<form class="rep-form" autocomplete="off">' +
+        (wEl.querySelector(".wb") || wEl).insertAdjacentHTML("beforeend", '<form class="rep-form" autocomplete="off">' +
           '<input class="rf-name" required maxlength="60" placeholder="Tên của bạn" value="' + esc(store.get("myname") || "") + '">' +
           '<textarea class="rf-msg" required rows="2" maxlength="300" placeholder="Viết trả lời…"></textarea>' +
           '<p class="rep-warn" hidden></p>' +
@@ -399,7 +443,8 @@
       rec.t = Date.now(); list.push(rec); store.set("rsvp", list);
     }
     store.set("myname", name);
-    wishes.push({ n: name, m: msg, t: Date.now(), local: true }); if (!SHEET_URL) store.set("wishes", wishes); renderWishes();
+    wishes.push({ n: name, m: msg, t: Date.now(), local: true });
+    shown = Math.max(shown, PAGE); if (!SHEET_URL) store.set("wishes", wishes); renderWishes();
     var th = $("#thanks");
     th.innerHTML = "Cảm ơn <b>" + esc(name) + "</b> đã gửi lời chúc 💛";
     th.hidden = false;
