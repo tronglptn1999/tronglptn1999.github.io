@@ -296,12 +296,66 @@
     var p2 = function (n) { return (n < 10 ? "0" : "") + n; };
     return p2(d.getHours()) + ":" + p2(d.getMinutes()) + " · " + p2(d.getDate()) + "/" + p2(d.getMonth() + 1) + "/" + d.getFullYear();
   }
+  /* lưu bút + trả lời: hiện 2 trả lời đầu, còn lại ẩn sau "… Xem thêm" */
+  var openR = {};
+  function replyHtml(r) {
+    var when = fmtTime(r.t);
+    return '<div class="rep"><b>' + esc(r.n) + "</b>" + (when ? "<time>" + when + "</time>" : "") + "<p>" + esc(r.m) + "</p></div>";
+  }
+  function moreText(n, open) { return open ? "Thu gọn" : "… Xem thêm " + n + " trả lời"; }
   function renderWishes() {
     $("#wishes").innerHTML = wishes.length ? wishes.slice().reverse().map(function (w) {
-      var when = fmtTime(w.t);
-      return '<div class="wish"><b>' + esc(w.n) + "</b>" + (when ? '<time>' + when + "</time>" : "") + "<p>" + esc(w.m) + "</p></div>";
+      var when = fmtTime(w.t), rs = w.r || [], id = (!w.local && Number(w.t)) || 0, more = rs.length - 2, open = !!openR[id];
+      var reps = rs.length ? '<div class="reps' + (open ? " open" : "") + '">' + rs.map(replyHtml).join("") +
+        (more > 0 ? '<button class="rep-more" type="button">' + moreText(more, open) + "</button>" : "") + "</div>" : "";
+      return '<div class="wish" data-id="' + id + '"><b>' + esc(w.n) + "</b>" + (when ? "<time>" + when + "</time>" : "") +
+        "<p>" + esc(w.m) + "</p>" + reps + (id ? '<button class="rep-btn" type="button">Trả lời</button>' : "") + "</div>";
     }).join("") : '<p class="wish-empty">Hãy là người đầu tiên gửi lời chúc nhé</p>';
   }
+  function findWish(id) { for (var i = 0; i < wishes.length; i++) if (Number(wishes[i].t) === id) return wishes[i]; return null; }
+  $("#wishes").addEventListener("click", function (e) {
+    var wEl = e.target.closest(".wish"); if (!wEl) return;
+    var id = Number(wEl.dataset.id);
+    if (e.target.closest(".rep-more")) {
+      var box = wEl.querySelector(".reps"), open = box.classList.toggle("open"), w = findWish(id);
+      openR[id] = open;
+      e.target.closest(".rep-more").textContent = moreText((w && w.r ? w.r.length : 2) - 2, open);
+      if (!open) box.scrollIntoView({ block: "nearest" });
+      return;
+    }
+    if (e.target.closest(".rep-cancel")) { wEl.querySelector(".rep-form").remove(); return; }
+    if (e.target.closest(".rep-btn")) {
+      var f = wEl.querySelector(".rep-form");
+      if (!f) {
+        wEl.insertAdjacentHTML("beforeend", '<form class="rep-form" autocomplete="off">' +
+          '<input class="rf-name" required maxlength="60" placeholder="Tên của bạn" value="' + esc(store.get("myname") || "") + '">' +
+          '<textarea class="rf-msg" required rows="2" maxlength="300" placeholder="Viết trả lời…"></textarea>' +
+          '<p class="rep-warn" hidden></p>' +
+          '<div class="rf-act"><button class="rep-cancel" type="button">Huỷ</button><button class="btn sm" type="submit">Gửi trả lời</button></div></form>');
+        f = wEl.querySelector(".rep-form");
+      }
+      (f.querySelector(".rf-name").value ? f.querySelector(".rf-msg") : f.querySelector(".rf-name")).focus();
+    }
+  });
+  $("#wishes").addEventListener("submit", function (e) {
+    e.preventDefault();
+    var f = e.target, wEl = f.closest(".wish"), id = Number(wEl.dataset.id), w = findWish(id);
+    var name = f.querySelector(".rf-name").value.trim(), msg = f.querySelector(".rf-msg").value.trim(), warnEl = f.querySelector(".rep-warn");
+    if (!w || !name || !msg) return;
+    var now = Date.now(), log = (store.get("replylog") || []).filter(function (t) { return now - t < 864e5; }), bad = "";
+    if (now - loadedAt < 4000) bad = "Bạn gửi hơi nhanh, thử lại sau vài giây nhé.";
+    else if (log.length && now - log[log.length - 1] < 15000) bad = "Bạn vừa trả lời xong, đợi vài giây rồi gửi tiếp nhé.";
+    else if (log.length >= 10) bad = "Bạn đã trả lời nhiều lần trong hôm nay. Cảm ơn bạn 💛";
+    else if (name.length < 2 || BAD.test(name) || /(.)\1{7,}/.test(name)) bad = "Tên chưa hợp lệ, bạn kiểm tra lại giúp mình nhé.";
+    else if (BAD.test(msg) || /(.)\1{9,}/.test(msg)) bad = "Trả lời không được chứa đường link hoặc ký tự lặp quá nhiều.";
+    if (bad) { warnEl.textContent = bad; warnEl.hidden = false; return; }
+    log.push(now); store.set("replylog", log); store.set("myname", name);
+    if (SHEET_URL) fetch(SHEET_URL, { method: "POST", mode: "no-cors", headers: { "Content-Type": "text/plain" },
+      body: JSON.stringify({ type: "reply", id: id, name: name, msg: msg, dev: deviceId, took: now - loadedAt }) }).catch(function () {});
+    (w.r = w.r || []).push({ n: name, m: msg, t: now });
+    if (w.r.length > 2) openR[id] = true;
+    renderWishes();
+  });
   renderWishes();
   var SHEET_URL = "https://script.google.com/macros/s/AKfycbwMESugtYokov2LOsYFSEr_aV3G4B99Ynw_vguUX78uIUpYBUN5AHSv-U3wS4OkYbIa/exec";
   if (SHEET_URL) {
@@ -344,7 +398,8 @@
       var list = store.get("rsvp") || [];
       rec.t = Date.now(); list.push(rec); store.set("rsvp", list);
     }
-    wishes.push({ n: name, m: msg, t: Date.now() }); if (!SHEET_URL) store.set("wishes", wishes); renderWishes();
+    store.set("myname", name);
+    wishes.push({ n: name, m: msg, t: Date.now(), local: true }); if (!SHEET_URL) store.set("wishes", wishes); renderWishes();
     var th = $("#thanks");
     th.innerHTML = "Cảm ơn <b>" + esc(name) + "</b> đã gửi lời chúc 💛";
     th.hidden = false;

@@ -343,3 +343,16 @@ body.opened .a{animation:up 1.2s cubic-bezier(.2,.7,.2,1) var(--d,0s) forwards}
 .cal-ics{display:block;margin-top:16px;text-align:center;font-size:.78rem;color:#9a6a2a}
 @media(min-width:600px){.calsheet{align-items:center}.cal-box{border-radius:20px}}
 .wish time{display:block;margin-top:2px;font-size:.66rem;letter-spacing:.06em;opacity:.6}
+.reps{margin:10px 0 0 4px;padding-left:12px;border-left:1px dashed rgba(236,210,154,.45);display:grid;gap:8px}
+.reps:not(.open) .rep:nth-of-type(n+3){display:none}
+.rep b{font:600 .95rem var(--serif);color:var(--gold2)}
+.rep time{display:inline;margin-left:6px}
+.rep p{font-size:.8rem}
+.rep-more,.rep-btn,.rep-cancel{border:0;background:none;padding:2px 0;color:var(--gold2);font:500 .72rem var(--sans);letter-spacing:.04em;cursor:pointer;justify-self:start}
+.rep-more{opacity:.85;text-decoration:underline;text-underline-offset:3px}
+.rep-btn{margin-top:8px;opacity:.8}
+.rep-btn::before{content:"↩ "}
+.rep-form{margin-top:10px;display:grid;gap:7px}
+.rep-form input,.rep-form textarea{width:100%;padding:9px 11px;border-radius:10px;border:1px solid rgba(200,160,85,.6);background:var(--paper);color:var(--ink);font:400 16px var(--sans);outline:none;resize:vertical}
+.rf-act{display:flex;justify-content:flex-end;align-items:center;gap:14px}
+.rep-warn{font-size:.74rem;color:#ffd9d9}

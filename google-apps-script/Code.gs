@@ -1,6 +1,6 @@
 // Dán toàn bộ file này vào Google Sheet: Tiện ích mở rộng > Apps Script
 // Sau khi dán: Triển khai > Quản lý bản triển khai > Sửa (biểu tượng bút) > Phiên bản: "Phiên bản mới" > Triển khai
-// Sheet có 3 tab: "RSVP" (xác nhận), "LuuBut" (lời chúc hiển thị), "BiChan" (bản ghi bị chặn spam)
+// Sheet có các tab: "RSVP", "LuuBut" (lời chúc), "TraLoi" (trả lời lời chúc), "BiChan" (bản ghi bị chặn spam)
 
 function sheet_(name, headers) {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
@@ -48,6 +48,13 @@ function doPost(e) {
     cache.put(gk, String(gc + 1), 120);
 
     var now = new Date();
+    // Trả lời một lời chúc: lưu vào tab "TraLoi", cột "Mã lời chúc" = thời điểm (ms) của lời chúc gốc
+    if (d.type === "reply") {
+      var wid = Number(d.id);
+      if (!wid || !msg) return ContentService.createTextOutput("bad reply");
+      sheet_("TraLoi", ["Thời gian", "Mã lời chúc", "Tên", "Trả lời"]).appendRow([now, wid, name, msg]);
+      return ContentService.createTextOutput("ok");
+    }
     sheet_("RSVP", ["Thời gian", "Tên", "Bên", "Tham dự", "Số người", "Lời chúc"])
       .appendRow([now, name, d.side, d.go, Math.min(10, Math.max(1, Number(d.num) || 1)), msg]);
     if (msg) sheet_("LuuBut", ["Thời gian", "Tên", "Lời chúc"]).appendRow([now, name, msg]);
@@ -61,7 +68,17 @@ function doGet() {
   var sh = sheet_("LuuBut", ["Thời gian", "Tên", "Lời chúc"]);
   var n = sh.getLastRow() - 1;
   var rows = n > 0 ? sh.getRange(2, 1, n, 3).getValues() : [];
-  var out = rows.slice(-100).map(function (r) { return { n: r[1], m: r[2], t: r[0] instanceof Date ? r[0].getTime() : r[0] }; });
+  var ms = function (v) { return v instanceof Date ? v.getTime() : Number(new Date(v)) || 0; };
+  // gom trả lời theo mã lời chúc
+  var rs = sheet_("TraLoi", ["Thời gian", "Mã lời chúc", "Tên", "Trả lời"]), rn = rs.getLastRow() - 1, byId = {};
+  (rn > 0 ? rs.getRange(2, 1, rn, 4).getValues() : []).forEach(function (r) {
+    var k = String(Number(r[1]));
+    (byId[k] = byId[k] || []).push({ n: r[2], m: r[3], t: ms(r[0]) });
+  });
+  var out = rows.slice(-100).map(function (r) {
+    var t = ms(r[0]);
+    return { n: r[1], m: r[2], t: t, r: byId[String(t)] || [] };
+  });
   return ContentService.createTextOutput(JSON.stringify(out))
     .setMimeType(ContentService.MimeType.JSON);
 }
