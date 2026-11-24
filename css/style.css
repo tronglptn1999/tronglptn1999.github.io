@@ -411,3 +411,13 @@ body.opened .a{animation:up 1.2s cubic-bezier(.2,.7,.2,1) var(--d,0s) forwards}
 @keyframes vpulse{50%{box-shadow:0 0 0 14px rgba(236,210,154,.08),0 10px 24px rgba(0,0,0,.4)}}
 .vid-cap{position:absolute;left:0;right:0;bottom:12px;z-index:1;text-align:center;font:600 .68rem var(--sans);letter-spacing:.2em;text-transform:uppercase;color:#fbefd2}
 .vid-frame{position:absolute;inset:0;width:100%;height:100%;border:0}
+/* chọn khách nhà trai / nhà gái */
+.side-pick{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.side-pick label{position:relative;cursor:pointer}
+.side-pick input{position:absolute;opacity:0;width:1px;height:1px;pointer-events:none}
+.side-pick span{display:block;text-align:center;padding:11px 6px;border-radius:12px;border:1px solid rgba(236,210,154,.5);color:var(--gold2);font:500 .86rem var(--sans);transition:background .2s,color .2s,box-shadow .2s;-webkit-tap-highlight-color:transparent}
+.side-pick input:checked+span{background:linear-gradient(135deg,#fbefd2,#d8b46c);color:var(--wine);border-color:transparent;font-weight:600;box-shadow:0 6px 16px rgba(0,0,0,.25)}
+.side-pick input:focus-visible+span{box-shadow:0 0 0 3px rgba(236,210,154,.45)}
+.side-tag{display:inline-block;padding:1px 8px;border-radius:99px;font:600 .6rem var(--sans);letter-spacing:.06em;text-transform:uppercase;align-self:center}
+.side-tag.trai{background:rgba(120,170,230,.18);color:#bcd6f5;border:1px solid rgba(150,190,240,.4)}
+.side-tag.gai{background:rgba(255,120,150,.16);color:#ffc2cf;border:1px solid rgba(255,150,175,.4)}

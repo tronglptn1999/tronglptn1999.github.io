@@ -79,7 +79,8 @@ function doPost(e) {
     }
     sheet_("RSVP", ["Thời gian", "Tên", "Bên", "Tham dự", "Số người", "Lời chúc"])
       .appendRow([now, name, d.side, d.go, Math.min(10, Math.max(1, Number(d.num) || 1)), msg]);
-    if (msg) sheet_("LuuBut", ["Thời gian", "Tên", "Lời chúc"]).appendRow([now, name, msg]);
+    var side = d.side === "trai" ? "Nhà trai" : d.side === "gai" ? "Nhà gái" : "";
+    if (msg) sheet_("LuuBut", ["Thời gian", "Tên", "Lời chúc", "Bên"]).appendRow([now, name, msg, side]);
     return ContentService.createTextOutput("ok");
   } finally {
     lock.releaseLock();
@@ -89,7 +90,7 @@ function doPost(e) {
 function doGet() {
   var sh = sheet_("LuuBut", ["Thời gian", "Tên", "Lời chúc"]);
   var n = sh.getLastRow() - 1;
-  var rows = n > 0 ? sh.getRange(2, 1, n, 3).getValues() : [];
+  var rows = n > 0 ? sh.getRange(2, 1, n, 4).getValues() : [];
   var ms = function (v) { return v instanceof Date ? v.getTime() : Number(new Date(v)) || 0; };
   // gom trả lời theo mã lời chúc
   var rs = sheet_("TraLoi", ["Thời gian", "Mã lời chúc", "Tên", "Trả lời"]), rn = rs.getLastRow() - 1, byId = {};
@@ -104,7 +105,8 @@ function doGet() {
   });
   var out = rows.slice(-100).map(function (r) {
     var t = ms(r[0]);
-    return { n: r[1], m: r[2], t: t, r: byId[String(t)] || [], h: hearts[String(t)] || 0 };
+    var s = r[3] === "Nhà trai" ? "trai" : r[3] === "Nhà gái" ? "gai" : "";
+    return { n: r[1], m: r[2], s: s, t: t, r: byId[String(t)] || [], h: hearts[String(t)] || 0 };
   });
   return ContentService.createTextOutput(JSON.stringify(out))
     .setMimeType(ContentService.MimeType.JSON);
@@ -134,7 +136,7 @@ function guiThongBaoTheoGio() {
   var fmt = function (t) { return Utilities.formatDate(new Date(t), "Asia/Ho_Chi_Minh", "HH:mm dd/MM"); };
 
   var ws = sheet_("LuuBut", ["Thời gian", "Tên", "Lời chúc"]), wn = ws.getLastRow() - 1;
-  var wishes = (wn > 0 ? ws.getRange(2, 1, wn, 3).getValues() : []);
+  var wishes = (wn > 0 ? ws.getRange(2, 1, wn, 4).getValues() : []);
   var nameById = {};
   wishes.forEach(function (r) { nameById[String(ms(r[0]))] = r[1]; });
   var newW = wishes.filter(function (r) { var t = ms(r[0]); return t > since && t <= now; });
@@ -150,7 +152,7 @@ function guiThongBaoTheoGio() {
   if (newW.length) {
     html += "<h3 style=\"margin:16px 0 4px\">💌 " + newW.length + " lời chúc mới</h3>";
     newW.forEach(function (r) {
-      html += '<div style="' + row + '"><b>' + h(r[1]) + '</b> <span style="color:#999;font-size:12px">' + fmt(ms(r[0])) + "</span><br>" + h(r[2]) + "</div>";
+      html += '<div style="' + row + '"><b>' + h(r[1]) + "</b>" + (r[3] ? " · " + h(r[3]) : "") + ' <span style="color:#999;font-size:12px">' + fmt(ms(r[0])) + "</span><br>" + h(r[2]) + "</div>";
     });
   }
   if (newR.length) {

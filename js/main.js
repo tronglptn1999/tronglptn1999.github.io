@@ -323,6 +323,10 @@
   }
   function moreText(n, open) { return open ? "Thu gọn" : "… Xem thêm " + n + " trả lời"; }
   var PAGE = 5, shown = PAGE, flashId = 0;
+  /* nhãn khách nhà trai / nhà gái */
+  function sideTag(s) {
+    return s === "trai" ? '<span class="side-tag trai">Nhà trai</span>' : s === "gai" ? '<span class="side-tag gai">Nhà gái</span>' : "";
+  }
   /* thả tim: mỗi máy 1 tim / lời chúc, bấm lần nữa để bỏ tim */
   var liked = store.get("liked") || {}, likeT = {};
   function heartBtn(id, h) {
@@ -342,7 +346,7 @@
         var reps = rs.length ? '<div class="reps' + (open ? " open" : "") + '">' + rs.map(replyHtml).join("") +
           (more > 0 ? '<button class="rep-more" type="button">' + moreText(more, open) + "</button>" : "") + "</div>" : "";
         return '<div class="wish' + (w.local || (flashId && Number(w.t) === flashId) ? " fresh" : "") + '" data-id="' + id + '">' + avatar(w.n) +
-          '<div class="wb"><div class="wh"><b>' + esc(w.n) + "</b>" + timeTag(w.t) + "</div>" +
+          '<div class="wb"><div class="wh"><b>' + esc(w.n) + "</b>" + sideTag(w.s) + timeTag(w.t) + "</div>" +
           '<p class="wt">' + esc(w.m) + "</p>" + reps + (id ? '<div class="wa">' + heartBtn(id, w.h) + '<button class="rep-btn" type="button">Trả lời</button></div>' : "") + "</div></div>";
       }).join("") +
       (rest > 0 ? '<button class="wb-more" type="button">Xem thêm ' + Math.min(PAGE, rest) + " lời chúc <small>(còn " + rest + ")</small></button>"
@@ -457,10 +461,17 @@
     if (msg && msg === store.get("lastmsg")) return "Lời chúc này bạn đã gửi rồi, hãy viết thêm một lời mới nhé.";
     return "";
   }
+  /* nhớ bên đã chọn lần trước */
+  function pickSide(v) {
+    var r = v && $("#rsvpForm").querySelector('input[name=fSide][value="' + v + '"]'); if (r) r.checked = true;
+  }
+  pickSide(store.get("myside"));
   $("#rsvpForm").addEventListener("submit", function (e) {
     e.preventDefault();
     var name = $("#fName").value.trim(), msg = $("#fMsg").value.trim();
+    var sc = $("#rsvpForm").querySelector("input[name=fSide]:checked"), side = sc ? sc.value : "";
     if (!name || !msg) return;
+    if (!side) { warn("Bạn chọn giúp mình là khách nhà trai hay nhà gái nhé."); return; }
     if ($("#fWeb").value) { e.target.reset(); return; } /* bẫy bot: ô ẩn bị điền */
     var bad = spamCheck(name, msg);
     if (bad) { warn(bad); return; }
@@ -468,20 +479,20 @@
     sent.push(Date.now()); store.set("sendlog", sent); if (msg) store.set("lastmsg", msg);
     var sb = e.target.querySelector("button[type=submit]"); sb.disabled = true; setTimeout(function () { sb.disabled = false; }, 8000);
     $("#thanks").className = "thanks";
-    var rec = { name: name, side: "", go: "", num: "", msg: msg, dev: deviceId, took: Date.now() - loadedAt };
+    var rec = { name: name, side: side, go: "", num: "", msg: msg, dev: deviceId, took: Date.now() - loadedAt };
     if (SHEET_URL) {
       fetch(SHEET_URL, { method: "POST", mode: "no-cors", headers: { "Content-Type": "text/plain" }, body: JSON.stringify(rec) }).catch(function () {});
     } else {
       var list = store.get("rsvp") || [];
       rec.t = Date.now(); list.push(rec); store.set("rsvp", list);
     }
-    store.set("myname", name);
-    wishes.push({ n: name, m: msg, t: Date.now(), local: true });
+    store.set("myname", name); store.set("myside", side);
+    wishes.push({ n: name, m: msg, s: side, t: Date.now(), local: true });
     shown = Math.max(shown, PAGE); if (!SHEET_URL) store.set("wishes", wishes); renderWishes();
     var th = $("#thanks");
     th.innerHTML = "Cảm ơn <b>" + esc(name) + "</b> đã gửi lời chúc 💛";
     th.hidden = false;
-    e.target.reset();
+    e.target.reset(); pickSide(side);
     confetti(40);
   });
 
