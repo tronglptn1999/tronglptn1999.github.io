@@ -529,6 +529,15 @@
     setTimeout(function () { card.classList.remove("hl"); }, 3200);
   });
 
+  /* ---------- Video cưới: chỉ nạp YouTube khi khách bấm xem (trang nhẹ, không tốn băng thông GitHub) ---------- */
+  var vf = $("#vidFacade");
+  if (vf) vf.addEventListener("click", function () {
+    if (!bgm.paused) { clearInterval(fadeT); bgm.pause(); musicBtn.classList.remove("on"); }
+    vf.outerHTML = '<iframe class="vid-frame" src="https://www.youtube-nocookie.com/embed/' + vf.dataset.yt +
+      '?autoplay=1&rel=0&playsinline=1&modestbranding=1" title="Video cưới Quang Trọng &amp; Thu Trang" ' +
+      'allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>';
+  });
+
   /* ---------- Chia sẻ ---------- */
   var SHARE_URL = "https://tronglptn1999.github.io/";
   var SHARE_TEXT = "Trân trọng mời bạn đến dự lễ cưới của Quang Trọng & Thu Trang — 28 & 29/11/2026 tại Kha Sơn, Thái Nguyên 💕";
